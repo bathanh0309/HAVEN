@@ -31,5 +31,3 @@ HAVEN là hệ thống giám sát hoạt động tại gia đình sử dụng tr
 - Hệ thống test riêng biệt theo cấp độ (Unit, Integration, E2E).
 - Kịch bản tiện ích trong `scripts/`.
 
----
-*Lấy cảm hứng và tiêu chuẩn tổ chức từ repository SMAC.*
