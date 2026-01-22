@@ -9,7 +9,7 @@ Giám sát: Lê Phong Phú
 ## 🎯 Tổng quan dự án (Overview)
 HAVEN là hệ thống giám sát hoạt động tại gia đình sử dụng trí tuệ nhân tạo để phát hiện các hành vi (ADL - Activities of Daily Living) và gửi thông báo khẩn cấp.
 
-![Architecture Pipeline](pipeline\pipeline.png)
+![Architecture Pipeline](pipeline/pipeline.png)
 
 Hệ thống cung cấp giải pháp streaming RTSP đơn giản và hiệu quả cho camera Tapo C210 với Backend Python FastAPI và Frontend HTML/CSS/JS thuần.
 
