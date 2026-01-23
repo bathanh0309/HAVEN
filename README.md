@@ -1,111 +1,70 @@
-# HAVEN - Home Activity Vision & Event Notification
+# HAVEN - Smart Surveillance System
 
-```
-Thực hiện: Nguyễn Bá Thành
-Giám sát: Lê Phong Phú
-```
----
+He thong giam sat camera su dung AI Pose Detection thoi gian thuc.
 
-## 🎯 Tổng quan dự án (Overview)
-HAVEN là hệ thống giám sát hoạt động tại gia đình sử dụng trí tuệ nhân tạo để phát hiện các hành vi (ADL - Activities of Daily Living) và gửi thông báo khẩn cấp.
+## Tinh nang
+- Real-time Streaming RTSP (Tapo C210)
+- AI Pose Detection (YOLOv8)
+- Ho tro luong HD va SD
+- WebSocket streaming (Low latency)
+- Tu dong ket noi lai
+- Toi uu cho Laptop khong GPU
 
-![Architecture Pipeline](pipeline/pipeline.png)
+## Yeu cau
+- Camera ho tro RTSP (VD: Tapo C210)
+- Python 3.10+
+- May tinh cung mang WiFi voi camera
 
-Hệ thống cung cấp giải pháp streaming RTSP đơn giản và hiệu quả cho camera Tapo C210 với Backend Python FastAPI và Frontend HTML/CSS/JS thuần.
+## Cai dat
 
----
+1. Clone repository
+   ```bash
+   git clone https://github.com/yourusername/HAVEN.git
+   cd HAVEN
+   ```
 
-## 🌐 Cấu hình Mạng & Cổng (Network Ports)
+2. Tao moi truong ao
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
 
-Để vận hành hệ thống, vui lòng lưu ý các cổng (port) quan trọng sau:
+3. Cai dat thu vien
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 1. Port 8090 - Web Dashboard (Giao diện người dùng)
-*   **Mô tả**: Đây là cổng truy cập chính cho giao diện Web của hệ thống HAVEN.
-*   **Chức năng**: Hiển thị luồng camera trực tiếp, các thông số trạng thái hệ thống và cảnh báo.
-*   **Cách dùng**: Truy cập `http://localhost:8090` trên trình duyệt sau khi khởi chạy frontend.
+## Cau hinh
 
-### 2. Port 554 - RTSP Stream (Kết nối Camera)
-*   **Mô tả**: Cổng chuẩn giao thức Real Time Streaming Protocol (RTSP) của camera Tapo C210.
-*   **Chức năng**: Truyền tải dữ liệu video thô từ camera về server xử lý.
-*   **Cấu hình**: `rtsp://<username>:<password>@<ip_address>:554/stream1`
-    *   `stream1`: Luồng HD (1080p)
-    *   `stream2`: Luồng SD (640x480) - Khuyên dùng để giảm độ trễ.
+1. Tao file .env
+   ```bash
+   copy .env.example .env
+   ```
 
----
+2. Sua file .env voi thong tin camera cua ban:
+   - IP, Username, Password (Account Camera, khong phai Cloud)
+   - Chinh RTSP Stream URL neu can
 
-## 🛠️ Cài đặt & Hướng dẫn (Setup Guide)
+## Chay he thong
 
-### Cấu hình Camera (Tapo C210)
-*   **IP Address**: `10.0.14.14`
-*   **Username / Password**: `bathanh0309` / `bathanh0309`
-*   **ONVIF Service**: `http://10.0.14.14:2020/onvif/device_service`
-
-### 🚀 Khởi chạy nhanh (Quick Start)
-
-#### Bước 1: Cài đặt thư viện
+Su dung script tu dong:
 ```bash
-# Kích hoạt môi trường ảo
-.venv\Scripts\activate.bat
-
-# Cài đặt các gói cần thiết
-pip install -r backend\requirements.txt
+.\run.bat
 ```
 
-#### Bước 2: Khởi động Backend Server
-```bash
-# Chạy file batch tự động
-run_camera.bat
+Hoac chay thu cong:
+1. Backend: `python backend/src/main.py`
+2. Frontend: `python -m http.server 8090` (tai thu muc frontend)
 
-# Hoặc chạy lệnh thủ công
-python backend\stream_server.py
-```
+Truy cap: http://localhost:8090
 
-#### Bước 3: Khởi chạy Frontend (Port 8090)
-Mở terminal tại thư mục `frontend` và chạy lệnh sau để khởi tạo server tại cổng 8090:
+## Bao mat (Quan trong)
 
-```bash
-cd frontend
-python -m http.server 8090
-```
-Sau đó truy cập: **http://localhost:8090**
+- KHONG BAO GIO commit file .env len Git.
+- Su dung script `.\.github\push.bat` de push code an toan. Script se tu dong kiem tra cac file nhay cam truoc khi push.
 
----
+## Troubleshooting
 
-## 📁 Cấu trúc dự án
-```
-HAVEN/
-├── backend/
-│   ├── stream_server.py      # Server xử lý luồng RTSP & WebSocket
-│   └── requirements.txt      # Thư viện Python yêu cầu
-├── frontend/
-│   ├── index.html            # Giao diện chính
-│   ├── style.css             # Giao diện Dark Mode hiện đại
-│   └── app.js                # Logic xử lý Frontend
-├── camera-tapo-C210/         # Tài liệu tham khảo camera
-└── run_camera.bat            # Script khởi chạy nhanh
-```
-
-## 🔧 Tính năng nổi bật
-
-### Backend
-*   ✅ Thu thập luồng RTSP qua OpenCV
-*   ✅ Streaming thời gian thực qua WebSockets
-*   ✅ Tự động kết nối lại (Auto-reconnect)
-*   ✅ Endpoint kiểm tra trạng thái (`/health`)
-
-### Frontend
-*   ✅ Giao diện Dark Mode hiện đại (Glassmorphism)
-*   ✅ Hiển thị FPS và trạng thái kết nối
-*   ✅ Responsive (Tương thích máy tính & điện thoại)
-
-## 🔍 Khắc phục sự cố (Troubleshooting)
-
-1.  **Camera không kết nối**:
-    *   Kiểm tra kết nối mạng: `ping 10.0.14.14`
-    *   Đảm bảo username/password đúng.
-2.  **Video bị trễ (Lag)**:
-    *   Chuyển sang dùng `stream2` (SD) thay vì `stream1` (HD).
-    *   Kiểm tra băng thông WiFi.
-
----
-**Created for HAVEN Project**
+- Loi module: Chay python tu thu muc goc hoac set PYTHONPATH.
+- Loi RTSP: Kiem tra IP, User/Pass, va dam bao da bat ONVIF/RTSP tren camera app.
+- Lag: Chuyen sang stream SD va giam FPS trong .env.
