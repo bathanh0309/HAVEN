@@ -1,70 +1,32 @@
-# HAVEN - Smart Surveillance System
+# HAVEN: Home Activity Vision & Event Notification
 
-He thong giam sat camera su dung AI Pose Detection thoi gian thuc.
+Hệ thống ADL (Activity of Daily Living) giúp nhận diện hành vi con người qua Camera/Video sử dụng AI Pose Estimation.
 
-## Tinh nang
-- Real-time Streaming RTSP (Tapo C210)
-- AI Pose Detection (YOLOv8)
-- Ho tro luong HD va SD
-- WebSocket streaming (Low latency)
-- Tu dong ket noi lai
-- Toi uu cho Laptop khong GPU
+## 🎥 Kết quả Demo (ADL + Pose)
 
-## Yeu cau
-- Camera ho tro RTSP (VD: Tapo C210)
-- Python 3.10+
-- May tinh cung mang WiFi voi camera
+![ADL Demo](adl_output.gif)
 
-## Cai dat
+> **Màu sắc Skeleton:**
+> - 🟢 Standing (Đứng)
+> - 🟡 Walking (Đi bộ)
+> - 🟨 Sitting (Ngồi)
+> - 🔴 Laying (Nằm)
 
-1. Clone repository
-   ```bash
-   git clone https://github.com/yourusername/HAVEN.git
-   cd HAVEN
-   ```
+## 🚀 Tính năng chính
+1. **Pose Classification**: Phân loại hành vi dựa trên góc xương và chuyển động.
+2. **Event Detection**: Phát hiện Ngã (Fall Down), Kêu cứu (Hand Up) - *đang phát triển*.
+3. **Tracking**: DeepSORT/IOU Tracking giữ ID đối tượng ổn định.
+4. **Tối ưu**: Chạy mượt trên Laptop CPU (YOLO11s) và Jetson Nano (YOLO11n).
 
-2. Tao moi truong ao
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate
-   ```
+## 🛠️ Cách chạy Demo
 
-3. Cai dat thu vien
-   ```bash
-   pip install -r requirements.txt
-   ```
+Chạy file batch để xem kết quả test trên video mẫu:
 
-## Cau hinh
-
-1. Tao file .env
-   ```bash
-   copy .env.example .env
-   ```
-
-2. Sua file .env voi thong tin camera cua ban:
-   - IP, Username, Password (Account Camera, khong phai Cloud)
-   - Chinh RTSP Stream URL neu can
-
-## Chay he thong
-
-Su dung script tu dong:
 ```bash
-.\run.bat
+.\pose_adl.bat
 ```
 
-Hoac chay thu cong:
-1. Backend: `python backend/src/main.py`
-2. Frontend: `python -m http.server 8090` (tai thu muc frontend)
+Sau khi chạy, nhấn phím **G** để quay màn hình (GIF), nhấn lần nữa để lưu.
 
-Truy cap: http://localhost:8090
-
-## Bao mat (Quan trong)
-
-- KHONG BAO GIO commit file .env len Git.
-- Su dung script `.\.github\push.bat` de push code an toan. Script se tu dong kiem tra cac file nhay cam truoc khi push.
-
-## Troubleshooting
-
-- Loi module: Chay python tu thu muc goc hoac set PYTHONPATH.
-- Loi RTSP: Kiem tra IP, User/Pass, va dam bao da bat ONVIF/RTSP tren camera app.
-- Lag: Chuyen sang stream SD va giam FPS trong .env.
+---
+**Bảo mật**: Sử dụng `.\.github\push.bat` để đẩy code an toàn lên GitHub.

@@ -38,7 +38,7 @@ class CameraSettings(BaseSettings):
     # ==================
     # AI Model Configuration
     # ==================
-    AI_MODEL_PATH: str = Field(default="models/gpu_jetsonnano/yolo11n-pose.pt")
+    AI_MODEL_PATH: str = Field(default="models/cpu_laptop/yolo11s-pose.pt")
     AI_CONF_THRES: float = Field(default=0.25, ge=0.01, le=1.0, description="Confidence threshold")
     AI_IOU_THRES: float = Field(default=0.45, ge=0.01, le=1.0, description="IOU threshold for NMS")
     AI_IMG_SIZE: int = Field(default=640, ge=320, le=1280, description="Inference image size")
