@@ -4,13 +4,22 @@ Hệ thống ADL (Activity of Daily Living) giúp nhận diện hành vi con ng�
 
 ## 🎥 Kết quả Demo (ADL + Pose)
 
-![ADL Demo](adl_output.gif)
+![ADL Demo](pose-adl-ver2.gif)
 
-> **Màu sắc Skeleton:**
-> - 🟢 Standing (Đứng)
-> - 🟡 Walking (Đi bộ)
-> - 🟨 Sitting (Ngồi)
-> - 🔴 Laying (Nằm)
+> **Màu sắc Skeleton (Bộ xương):**
+> - 🔴 **Head** (Đầu) - Red
+> - 💗 **Torso** (Thân) - Pink
+> - 🟢 **Upper Arm** (Cánh tay trên: Vai → Khuỷu tay) - Green
+> - 🟩 **Lower Arm** (Cánh tay dưới/Bàn tay: Khuỷu → Cổ tay) - Dark Green
+> - 🟠 **Upper Leg** (Chân trên: Hông → Đầu gối) - Orange
+> - 🟡 **Lower Leg** (Chân dưới/Bàn chân: Đầu gối → Mắt cá) - Yellow
+
+> **Màu sắc BBox (Tư thế):**
+> - 🟢 **Standing** (Đứng) - Green
+> - 🔵 **Walking** (Đi bộ) - Cyan
+> - 🟡 **Sitting** (Ngồi) - Yellow
+> - 🔴 **Laying** (Nằm) - Red
+> - ⚪ **Unknown** (Không xác định) - Gray
 
 ## 🚀 Tính năng chính
 1. **Pose Classification**: Phân loại hành vi dựa trên góc xương và chuyển động.
