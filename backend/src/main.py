@@ -161,6 +161,19 @@ if frontend_path.exists():
 
 
 # ==================
+# Serve app.js
+# ==================
+from fastapi.responses import FileResponse
+
+@app.get("/app.js")
+async def serve_app_js():
+    js_file = frontend_path / "app.js"
+    if js_file.exists():
+        return FileResponse(js_file, media_type="application/javascript")
+    return HTMLResponse("// not found", status_code=404)
+
+
+# ==================
 # Root Endpoint (Serve Frontend)
 # ==================
 @app.get("/", response_class=HTMLResponse)

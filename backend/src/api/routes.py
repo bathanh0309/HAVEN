@@ -13,6 +13,7 @@ import time
 import logging
 from typing import Literal, Optional
 from datetime import datetime
+import json
 
 # Import dependencies
 from ..core.stream_manager import StreamManager, get_stream_manager
@@ -31,8 +32,8 @@ _cached_ai_engine = None
 
 def get_deps():
     """
-    Get singleton instances of dependencies.
-    Config and managers are loaded ONCE and cached.
+    Lấy các instance singleton của các phụ thuộc (dependencies).
+    Cấu hình và các trình quản lý (StreamManager, AIEngine) chỉ được tải MỘT LẦN và lưu vào cache.
     """
     global _cached_config, _cached_stream_mgr, _cached_ai_engine
     
@@ -53,12 +54,17 @@ def get_deps():
 # ==================
 @router.get("/api/health")
 async def health_check():
+    """
+    Kiểm tra sức khỏe hệ thống API.
+    Trả về thông tin kết nối camera, FPS hiện tại và cấu hình.
+    """
     stream, _, config = get_deps()
     stats = stream.get_stats()
     return {
         "status": "ok",
         "camera": config.CAMERA_NAME,
-        "details": stats
+        "details": stats,
+        "config": config.to_public_info()
     }
 
 
@@ -67,6 +73,10 @@ async def health_check():
 # ==================
 @router.post("/api/stream/switch")
 async def switch_stream(stream: Literal["HD", "SD"] = Query(...)):
+    """
+    Chuyển đổi luồng video giữa HD và SD.
+    Yêu cầu StreamManager thực hiện việc chuyển đổi kết nối RTSP.
+    """
     stream_mgr, _, _ = get_deps()
     success = stream_mgr.switch_stream(stream)
     return {"success": success, "current_stream": stream}
@@ -78,11 +88,8 @@ async def switch_stream(stream: Literal["HD", "SD"] = Query(...)):
 @router.get("/video_feed")
 async def video_feed(stream: Optional[str] = None, ai: bool = True):
     """
-    MJPEG streaming endpoint.
-    
-    Query params:
-    - stream: "HD" or "SD" (optional)
-    - ai: Enable AI inference (default True, set False for raw stream)
+    Endpoint streaming MJPEG (dùng cho các trình duyệt/client cũ).
+    Lưu ý: Endpoint này không hỗ trợ gửi metadata (box, confidence) tách biệt như WebSocket.
     """
     stream_mgr, ai_engine, config = get_deps()
     
@@ -90,7 +97,7 @@ async def video_feed(stream: Optional[str] = None, ai: bool = True):
         stream_mgr.switch_stream(stream.upper())
 
     def frame_gen():
-        """Synchronous generator for MJPEG frames."""
+        """Generator đồng bộ để tạo các frame MJPEG."""
         error_count = 0
         max_errors = 10
         
@@ -100,19 +107,19 @@ async def video_feed(stream: Optional[str] = None, ai: bool = True):
                 data = stream_mgr.get_latest_frame()
                 
                 if data is None:
-                    # No frame available, short sleep to avoid busy loop
                     time.sleep(0.01)
                     continue
                 
                 frame, meta = data
                 error_count = 0  # Reset on success
                 
-                # AI Inference (optional, with fail-safe)
+                # AI Inference
                 if ai and ai_engine is not None:
                     try:
-                        frame = ai_engine.process_frame(frame)
+                        # Process frame returns (annotated_frame, detections_list)
+                        # MJPEG only cares about the image
+                        frame, _ = ai_engine.process_frame(frame)
                     except Exception as e:
-                        # AI failed, continue with raw frame
                         logger.warning(f"AI inference failed: {e}")
                 
                 # Encode JPEG
@@ -124,21 +131,19 @@ async def video_feed(stream: Optional[str] = None, ai: bool = True):
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + buf.tobytes() + b'\r\n')
                 
-                # FPS limiting (if configured)
+                # FPS limiting
                 if config.FPS_LIMIT > 0:
                     time.sleep(1.0 / config.FPS_LIMIT)
                     
             except GeneratorExit:
-                # Client disconnected
                 logger.info("MJPEG client disconnected")
                 break
             except Exception as e:
                 error_count += 1
                 logger.error(f"MJPEG frame error: {e}")
                 if error_count >= max_errors:
-                    logger.error("Too many errors, stopping MJPEG stream")
                     break
-                time.sleep(0.1)  # Brief pause before retry
+                time.sleep(0.1)
 
     return StreamingResponse(
         frame_gen(), 
@@ -147,13 +152,14 @@ async def video_feed(stream: Optional[str] = None, ai: bool = True):
 
 
 # ==================
-# WebSocket Stream (Low Latency)
+# WebSocket Stream (Low Latency + Metadata)
 # ==================
 @router.websocket("/ws/stream")
 async def websocket_stream(websocket: WebSocket):
     """
-    WebSocket streaming endpoint.
-    Lower latency than MJPEG, sends base64 encoded frames.
+    Endpoint streaming qua WebSocket.
+    Gửi gói tin JSON chứa hình ảnh (Base64) VÀ Metadata (Detections, FPS, TS).
+    Đây là phương thức chính để truyền dữ liệu cho Frontend mới.
     """
     await websocket.accept()
     stream_mgr, ai_engine, config = get_deps()
@@ -174,11 +180,13 @@ async def websocket_stream(websocket: WebSocket):
                 
                 frame, meta = data
                 error_count = 0
+                detections = []
                 
-                # AI Inference (with fail-safe)
+                # AI Inference
                 if ai_engine is not None:
                     try:
-                        frame = ai_engine.process_frame(frame)
+                        # Unpack tuple: (annotated_frame, detections_list)
+                        frame, detections = ai_engine.process_frame(frame)
                     except Exception as e:
                         logger.warning(f"AI inference failed: {e}")
                 
@@ -195,15 +203,21 @@ async def websocket_stream(websocket: WebSocket):
                     "type": "frame",
                     "data": b64_data,
                     "metadata": {
-                        "fps": meta.get('fps', 0),
-                        "w": meta.get('w', 0),
-                        "h": meta.get('h', 0),
-                        "ts": datetime.now().isoformat()
+                        "ts": datetime.now().isoformat(),
+                        "detections": detections, # List of {label, conf, box}
+                        "roi_active": config.ROI_ENABLED,
+                        "fps": meta.get('fps', 0)
                     }
                 }
                 
                 # Send to client
                 await websocket.send_json(payload)
+                
+                # FPS Limit enforced by asyncio sleep if needed, 
+                # but 'await' on send_json acts as natural backpressure often.
+                # Explicit limit:
+                if config.FPS_LIMIT > 0:
+                    await asyncio.sleep(1.0 / config.FPS_LIMIT)
                 
             except Exception as e:
                 error_count += 1
@@ -224,20 +238,14 @@ async def websocket_stream(websocket: WebSocket):
 
 
 # ==================
-# Route Initialization (called from main.py)
+# Route Initialization
 # ==================
 def init_routes(mgr, cfg):
     """
-    Initialize routes with pre-configured dependencies.
-    Called during app startup to ensure singletons are ready.
+    Khởi tạo các singleton dependency từ main.py.
     """
     global _cached_config, _cached_stream_mgr, _cached_ai_engine
-    
     _cached_config = cfg
     _cached_stream_mgr = mgr
-    
-    # Lazy load AI engine (first frame will trigger load)
-    # This avoids blocking startup if model is large
     _cached_ai_engine = get_ai_engine(cfg)
-    
     logger.info("Routes initialized with dependencies")

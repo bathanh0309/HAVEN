@@ -38,7 +38,7 @@ class CameraSettings(BaseSettings):
     # ==================
     # AI Model Configuration
     # ==================
-    AI_MODEL_PATH: str = Field(default="models/yolo26n-pose.pt")
+    AI_MODEL_PATH: str = Field(default="models/gpu_jetsonnano/yolo11n-pose.pt")
     AI_CONF_THRES: float = Field(default=0.25, ge=0.01, le=1.0, description="Confidence threshold")
     AI_IOU_THRES: float = Field(default=0.45, ge=0.01, le=1.0, description="IOU threshold for NMS")
     AI_IMG_SIZE: int = Field(default=640, ge=320, le=1280, description="Inference image size")
@@ -91,7 +91,10 @@ class CameraSettings(BaseSettings):
     # ==================
     @field_validator("CAMERA_IP")
     @classmethod
+    @field_validator("CAMERA_IP")
+    @classmethod
     def validate_ip(cls, v: str) -> str:
+        """Kiểm tra định dạng địa chỉ IP (xxx.xxx.xxx.xxx)."""
         parts = v.split(".")
         if len(parts) != 4:
             raise ValueError("IP must be in format: xxx.xxx.xxx.xxx")
@@ -107,6 +110,7 @@ class CameraSettings(BaseSettings):
     @field_validator("DEFAULT_STREAM")
     @classmethod
     def validate_stream_type(cls, v: str) -> str:
+        """Chuẩn hóa loại luồng thành chữ in hoa (HD/SD)."""
         return v.upper()
     
     # ==================
@@ -128,6 +132,9 @@ class CameraSettings(BaseSettings):
     # Helper Methods
     # ==================
     def get_stream_url(self, stream_type: Literal["HD", "SD"]) -> str:
+        """
+        Lấy URL RTSP đầy đủ (bao gồm user/pass) cho loại luồng tương ứng.
+        """
         stream_type = stream_type.upper()
         if stream_type == "HD":
             return self.rtsp_url_hd
@@ -137,7 +144,10 @@ class CameraSettings(BaseSettings):
             raise ValueError(f"Invalid stream type: {stream_type}")
     
     def get_roi_coords(self, frame_width: int, frame_height: int) -> tuple:
-        """Get ROI pixel coordinates from percentage values."""
+        """
+        Tính toán tọa độ pixel của vùng ROI từ các giá trị phần trăm (0-1).
+        Trả về (x1, y1, x2, y2).
+        """
         x1 = int(self.ROI_X1 * frame_width)
         y1 = int(self.ROI_Y1 * frame_height)
         x2 = int(self.ROI_X2 * frame_width)
@@ -145,6 +155,9 @@ class CameraSettings(BaseSettings):
         return (x1, y1, x2, y2)
     
     def to_public_info(self) -> dict:
+        """
+        Xuất cấu hình an toàn (không chứa mật khẩu) để gửi về frontend.
+        """
         return {
             "name": self.CAMERA_NAME,
             "available_streams": ["HD", "SD"],
@@ -171,6 +184,10 @@ class CameraSettings(BaseSettings):
 # Global Config Instance
 # ==================
 def load_camera_config() -> CameraSettings:
+    """
+    Tải cấu hình từ file .env.
+    Nếu không thấy file .env sẽ báo lỗi log.
+    """
     try:
         config = CameraSettings()
         logger.info(f"Camera config loaded: {config.CAMERA_NAME}")
