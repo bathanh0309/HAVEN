@@ -2,12 +2,12 @@
 
 Hệ thống giám sát thông minh ADL (Activity of Daily Living) sử dụng AI để nhận diện hành vi, phát hiện sự cố và xâm nhập vùng cấm.
 
-## 🎥 Demo Tính Năng Mới (Ver 5)
+## Demo Tính Năng Mới (Ver 6)
 *Tích hợp: Pose + ADL + Zone Intrusion + Object Detection*
 
 ![Demo HAVEN](backend/outputs/pose-adl-ver6.gif)
 
-## 🚀 Tính Năng Chính
+## Tính Năng Chính
 1. **Pose Detection**: Nhận diện tư thế (Đứng, Đi, Ngồi, Nằm).
 2. **Event Detection**: Phát hiện sự kiện (Ngã, Giơ tay cầu cứu, Ngồi xuống, Đứng lên).
 3. **Zone Intrusion**: Cảnh báo khi người đi vào vùng cấm (Ví dụ: Bếp, Khu vực nguy hiểm).
@@ -15,7 +15,7 @@ Hệ thống giám sát thông minh ADL (Activity of Daily Living) sử dụng A
 
 ---
 
-## 🎨 Quy Định Màu Sắc (Color Coding)
+## Quy Định Màu Sắc (Color Coding)
 
 Hệ thống sử dụng mã màu để người dùng dễ dàng nhận biết trạng thái:
 
@@ -41,7 +41,7 @@ Hệ thống sử dụng mã màu để người dùng dễ dàng nhận biết 
 
 ---
 
-## 🛠️ Hướng Dẫn Sử Dụng
+## Hướng Dẫn Sử Dụng
 
 ### 1. Chạy với Video File
 Dùng để kiểm thử tính năng với video có sẵn.
@@ -57,7 +57,7 @@ Dùng cho camera giám sát thực tế (IP Camera).
 ```
 *Cấu hình Camera:* Chỉnh sửa file `.env` (IP, Port, User, Pass).
 
-### ⌨️ Phím Tắt Điều Khiển
+### Phím Tắt Điều Khiển
 | Phím | Chức Năng |
 | :---: | :--- |
 | **Q** | Thoát chương trình |
