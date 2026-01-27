@@ -1,41 +1,70 @@
 # HAVEN: Home Activity Vision & Event Notification
 
-Hệ thống ADL (Activity of Daily Living) giúp nhận diện hành vi con người qua Camera/Video sử dụng AI Pose Estimation.
+Hệ thống giám sát thông minh ADL (Activity of Daily Living) sử dụng AI để nhận diện hành vi, phát hiện sự cố và xâm nhập vùng cấm.
 
-## 🎥 Kết quả Demo (ADL + Pose)
+## 🎥 Demo Tính Năng Mới (Ver 5)
+*Tích hợp: Pose + ADL + Zone Intrusion + Object Detection*
 
-![ADL Demo](pose-adl-ver2.gif)
+![Demo HAVEN](backend/outputs/pose-adl-ver6.gif)
 
-> **Màu sắc Skeleton (Bộ xương):**
-> - 🔴 **Head** (Đầu) - Red
-> - 💗 **Torso** (Thân) - Pink
-> - 🟢 **Upper Arm** (Cánh tay trên: Vai → Khuỷu tay) - Green
-> - 🟩 **Lower Arm** (Cánh tay dưới/Bàn tay: Khuỷu → Cổ tay) - Dark Green
-> - 🟠 **Upper Leg** (Chân trên: Hông → Đầu gối) - Orange
-> - 🟡 **Lower Leg** (Chân dưới/Bàn chân: Đầu gối → Mắt cá) - Yellow
+## 🚀 Tính Năng Chính
+1. **Pose Detection**: Nhận diện tư thế (Đứng, Đi, Ngồi, Nằm).
+2. **Event Detection**: Phát hiện sự kiện (Ngã, Giơ tay cầu cứu, Ngồi xuống, Đứng lên).
+3. **Zone Intrusion**: Cảnh báo khi người đi vào vùng cấm (Ví dụ: Bếp, Khu vực nguy hiểm).
+4. **Object Detection**: Phát hiện vật dụng nguy hiểm (Dao, Kéo, Điện thoại).
 
-> **Màu sắc BBox (Tư thế):**
-> - 🟢 **Standing** (Đứng) - Green
-> - 🔵 **Walking** (Đi bộ) - Cyan
-> - 🟡 **Sitting** (Ngồi) - Yellow
-> - 🔴 **Laying** (Nằm) - Red
-> - ⚪ **Unknown** (Không xác định) - Gray
+---
 
-## 🚀 Tính năng chính
-1. **Pose Classification**: Phân loại hành vi dựa trên góc xương và chuyển động.
-2. **Event Detection**: Phát hiện Ngã (Fall Down), Kêu cứu (Hand Up) - *đang phát triển*.
-3. **Tracking**: DeepSORT/IOU Tracking giữ ID đối tượng ổn định.
-4. **Tối ưu**: Chạy mượt trên Laptop CPU (YOLO11s) và Jetson Nano (YOLO11n).
+## 🎨 Quy Định Màu Sắc (Color Coding)
 
-## 🛠️ Cách chạy Demo
+Hệ thống sử dụng mã màu để người dùng dễ dàng nhận biết trạng thái:
 
-Chạy file batch để xem kết quả test trên video mẫu:
+### 1. Trạng Thái Người (Bounding Box)
+| Màu Sắc | Ý Nghĩa | Trạng Thái |
+| :--- | :--- | :--- |
+| 🟢 **Xanh Lá** | **BÌNH THƯỜNG** | Đứng (Standing) |
+| 🔵 **Cyan** | **HOẠT ĐỘNG** | Đi lại (Walking) |
+| 🟠 **Cam** | **TĨNH TẠI** | Ngồi (Sitting) |
+| 🔴 **Đỏ** | **NGUY HIỂM** | Nằm (Laying), Ngã (Fall Down) |
+| ⚪ **Xám** | **KHÔNG RÕ** | Chưa xác định (Unknown) |
 
+### 2. Cảnh Báo (Alerts)
+- **Vùng Cấm (Zone)**: Khung 🔴 **Đỏ** + Nền đỏ nhạt.
+- **Vật Nguy Hiểm**: Khung 🔴 **Đỏ Đậm** kèm nhãn cảnh báo.
+
+### 3. Bộ Xương (Skeleton)
+Để hỗ trợ chẩn đoán tư thế chính xác:
+- 🔴 **Đầu**: Đỏ (Red)
+- 🟣 **Thân**: Tím (Magenta)
+- 🔵 **Tay**: Cyan (Trên) & Xanh dương (Dưới)
+- 🟠 **Chân**: Cam (Trên) & Xanh lá mạ (Dưới)
+
+---
+
+## 🛠️ Hướng Dẫn Sử Dụng
+
+### 1. Chạy với Video File
+Dùng để kiểm thử tính năng với video có sẵn.
 ```bash
-.\pose_adl.bat
+.\video-pose-adl.bat
 ```
+*Để thay đổi video:* Chỉnh sửa file `.env` dòng `TEST_VIDEO_PATH`.
 
-Sau khi chạy, nhấn phím **G** để quay màn hình (GIF), nhấn lần nữa để lưu.
+### 2. Chạy với Camera RTSP
+Dùng cho camera giám sát thực tế (IP Camera).
+```bash
+.\rtsp_pose_adl.bat
+```
+*Cấu hình Camera:* Chỉnh sửa file `.env` (IP, Port, User, Pass).
+
+### ⌨️ Phím Tắt Điều Khiển
+| Phím | Chức Năng |
+| :---: | :--- |
+| **Q** | Thoát chương trình |
+| **Space** | Tạm dừng / Tiếp tục |
+| **L** | Bật / Tắt chế độ lặp lại video |
+| **G** | **Ghi hình (GIF)** - Nhấn lần 1 để bắt đầu, lần 2 để lưu |
+| **H / S** | Chuyển luồng HD / SD (chỉ dùng cho RTSP) |
 
 ---
 **Bảo mật**: Sử dụng `.\.github\push.bat` để đẩy code an toàn lên GitHub.
