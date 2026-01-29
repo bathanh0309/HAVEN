@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 from typing import Dict, Any, Optional, Tuple, List
 from ultralytics import YOLO
-from ..config.camera_config import CameraSettings
+from config.camera_config import CameraSettings
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,9 @@ class AIEngine:
                 cls_id = int(box.cls[0])
                 label = res.names[cls_id]
                 
+                # Get Track ID if available
+                track_id = int(box.id[0]) if box.id is not None else -1
+                
                 # Adjust for ROI offset
                 x1 += rx
                 x2 += rx
@@ -78,7 +81,8 @@ class AIEngine:
                 y2 += ry
                 
                 detection = {
-                    "label": label,
+                    "label": f"{label} #{track_id}" if track_id > 0 else label,
+                    "track_id": track_id,
                     "conf": round(conf, 2),
                     "box": [int(x1), int(y1), int(x2), int(y2)]
                 }
@@ -160,13 +164,15 @@ class AIEngine:
             try:
                 start_time = time.time()
                 
-                results = self.model(
+                results = self.model.track(
                     inference_frame, 
                     verbose=False, 
+                    persist=True,
                     conf=self.conf_thres, 
                     iou=self.iou_thres,
                     imgsz=self.img_size,
-                    max_det=self.max_det
+                    max_det=self.max_det,
+                    tracker="bytetrack.yaml"
                 )
                 
                 self.last_results = results

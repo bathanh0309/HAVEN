@@ -91,8 +91,6 @@ class CameraSettings(BaseSettings):
     # ==================
     @field_validator("CAMERA_IP")
     @classmethod
-    @field_validator("CAMERA_IP")
-    @classmethod
     def validate_ip(cls, v: str) -> str:
         """Kiểm tra định dạng địa chỉ IP (xxx.xxx.xxx.xxx)."""
         parts = v.split(".")
