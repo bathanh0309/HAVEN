@@ -367,12 +367,26 @@ class SequentialRunner:
                         print("\n[REC] Started GIF recording...")
                     else:
                         self.recording = False
-                        print(f"\n[REC] Stop. Saving GIF ({len(self.gif_frames)} frames)...")
-                        if self.gif_frames and imageio:
+                        print(f"\n[REC] Stop. Saving ({len(self.gif_frames)} frames)...")
+                        if self.gif_frames:
                             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            out_path = self.output_dir / f"rec_{ts}.gif"
-                            imageio.mimsave(out_path, self.gif_frames, fps=10)
-                            print(f"[REC] Saved: {out_path}")
+                            if imageio:
+                                out_path = self.output_dir / f"rec_{ts}.gif"
+                                try:
+                                    imageio.mimsave(out_path, self.gif_frames, fps=10)
+                                    print(f"[REC] Saved GIF: {out_path}")
+                                except Exception as e:
+                                    print(f"[REC] Error saving GIF: {e}")
+                            else:
+                                # Fallback to PIL (Pillow)
+                                try:
+                                    from PIL import Image
+                                    out_path = self.output_dir / f"rec_{ts}.gif"
+                                    pil_frames = [Image.fromarray(fr) for fr in self.gif_frames]
+                                    pil_frames[0].save(out_path, save_all=True, append_images=pil_frames[1:], optimize=True, duration=100, loop=0)
+                                    print(f"[REC] Saved GIF (via PIL): {out_path}")
+                                except Exception as e:
+                                    print(f"[REC] Error saving GIF: {e}")
                         self.gif_frames = []
             else:
                 # Paused handling
@@ -391,12 +405,26 @@ class SequentialRunner:
                         print("\n[REC] Started GIF recording...")
                     else:
                         self.recording = False
-                        print(f"\n[REC] Stop. Saving GIF ({len(self.gif_frames)} frames)...")
-                        if self.gif_frames and imageio:
+                        print(f"\n[REC] Stop. Saving ({len(self.gif_frames)} frames)...")
+                        if self.gif_frames:
                             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            out_path = self.output_dir / f"rec_{ts}.gif"
-                            imageio.mimsave(out_path, self.gif_frames, fps=10)
-                            print(f"[REC] Saved: {out_path}")
+                            if imageio:
+                                out_path = self.output_dir / f"rec_{ts}.gif"
+                                try:
+                                    imageio.mimsave(out_path, self.gif_frames, fps=10)
+                                    print(f"[REC] Saved GIF: {out_path}")
+                                except Exception as e:
+                                    print(f"[REC] Error saving GIF: {e}")
+                            else:
+                                # Fallback to PIL (Pillow)
+                                try:
+                                    from PIL import Image
+                                    out_path = self.output_dir / f"rec_{ts}.gif"
+                                    pil_frames = [Image.fromarray(fr) for fr in self.gif_frames]
+                                    pil_frames[0].save(out_path, save_all=True, append_images=pil_frames[1:], optimize=True, duration=100, loop=0)
+                                    print(f"[REC] Saved GIF (via PIL): {out_path}")
+                                except Exception as e:
+                                    print(f"[REC] Error saving GIF: {e}")
                         self.gif_frames = []
         
         cap.release()
