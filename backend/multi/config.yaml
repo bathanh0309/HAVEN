@@ -1,0 +1,120 @@
+# ============================================================
+# HAVEN Multi-Camera Configuration
+# ============================================================
+# Unified config cho hệ thống multi-camera với:
+# - Pose detection + ADL classification
+# - Cross-camera ReID (Color Histogram)
+# - Master-Slave ID assignment
+# ============================================================
+
+# ============================================================
+# CAMERAS
+# ============================================================
+cameras:
+  - id: "cam1"
+    name: "Camera 1"
+    enabled: true
+    source_type: "video"
+    video_path: "D:/HAVEN/backend/data/multi-camera/phu1.mp4"
+    rtsp_url: "rtsp://192.168.1.101:554/stream1"
+    rtsp_username: "admin"
+    rtsp_password: "password"
+    
+  - id: "cam2"
+    name: "Camera 2"
+    enabled: true
+    source_type: "video"
+    video_path: "D:/HAVEN/backend/data/multi-camera/phu2.mp4"
+    rtsp_url: "rtsp://192.168.1.102:554/stream1"
+    rtsp_username: "admin"
+    rtsp_password: "password"
+    
+  - id: "cam3"
+    name: "Camera 3"
+    enabled: true
+    source_type: "video"
+    video_path: "D:/HAVEN/backend/data/multi-camera/phu3.mp4"
+    rtsp_url: "rtsp://192.168.1.103:554/stream1"
+    rtsp_username: "admin"
+    rtsp_password: "password"
+  
+  - id: "cam4"
+    name: "Camera 4"
+    enabled: true
+    source_type: "video"
+    video_path: "D:/HAVEN/backend/data/multi-camera/phu4.mp4"
+    rtsp_url: "rtsp://192.168.1.104:554/stream1"
+    rtsp_username: "admin"
+    rtsp_password: "password"
+  
+  - id: "cam5"
+    name: "Camera 5 (High Angle)"
+    enabled: true
+    source_type: "video"
+    video_path: "D:/HAVEN/backend/data/multi-camera/phu5.mp4"
+    rtsp_url: "rtsp://192.168.1.105:554/stream1"
+    rtsp_username: "admin"
+    rtsp_password: "password"
+    # Note: High angle camera - person with knife, fall detection
+
+# ============================================================
+# YOLO MODEL
+# ============================================================
+yolo:
+  model: "yolo11n-pose.pt"
+  conf_threshold: 0.4  # LOWERED for high angle detection
+  iou_threshold: 0.45
+  device: "cuda"
+  img_size: 640
+
+# ============================================================
+# ReID (Re-Identification)
+# ============================================================
+reid:
+  # Matching threshold (0.0 - 1.0)
+  # Lower = match easier, Higher = stricter
+  # NOTE: If person changes clothes, ReID may fail (uses color histogram)
+  threshold: 0.45  # LOWERED more - for clothing variations
+  
+  # Update features every N frames
+  update_interval: 5
+  
+  # Max features to keep per person
+  max_features: 30
+
+# ============================================================
+# ADL - Simplified: WALKING / FALL_DOWN only
+# ============================================================
+adl:
+  # Movement threshold for WALKING detection
+  movement_threshold_ratio: 0.02  # Very sensitive
+
+  # FALL_DOWN thresholds - VERY SENSITIVE for high angle camera
+  torso_angle_laying: 25  # VERY LOW - detect falls early
+  aspect_ratio_laying: 0.7  # VERY LOW - wide bbox = fall
+  
+  # Voting frames (lower = faster response)
+  posture_voting_frames: 2
+  
+  # Keypoint confidence
+  keypoint_conf: 0.2  # LOW for high angle visibility
+
+# ============================================================
+# DISPLAY
+# ============================================================
+display:
+  width: 1280
+  height: 720
+  window_name: "HAVEN Sequential"
+
+# ============================================================
+# OUTPUT
+# ============================================================
+output:
+  # Database
+  database_enabled: true
+  database_path: "D:/HAVEN/backend/haven_reid.db"
+  
+  # Logging
+  log_enabled: true
+  log_level: "INFO"

@@ -401,3 +401,7 @@ After testing the skill, users may request improvements. Often this happens righ
 - **Face Recognition**: REMOVED. Do not mention or implement code related to face recognition, face embeddings, or face registration.
 - **Demographics**: REMOVED. Do not mention or implement code related to gender or age estimation.
 - **Focus**: The project is strictly about Pose Estimation and ADL (Activity of Daily Living) detection.
+
+### 6. Task Management & Architecture
+- **Tasks Folder**: Deploy and organize project tasks around the `tasks/` directory. Use this as the central hub for implementation plans and tracking.
+- **Architecture Folder**: Refer to PDF articles and research papers in the `architecture/` directory for theoretical background and system design reference.
