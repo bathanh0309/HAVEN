@@ -12,7 +12,7 @@ Hệ thống giám sát thông minh hỗ trợ nhận diện hành vi ADL (Activ
 
 1.  **Nhận diện tư thế (Pose Detection)**: Phân loại các trạng thái cơ thể như Đứng, Đi, Ngồi, Nằm.
 2.  **Phát hiện sự kiện (Event Detection)**: Nhận biết các hành động như Ngã, Ngồi xuống, Đứng lên.
-3.  **Giám sát khu vực (Zone Intrusion)**: Cảnh báo khi có người xâm nhập vào các vùng đã thiết lập .
+3.  **Giám sát khu vực (Zone Intrusion)**: Cảnh báo khi có người xâm nhập vào các vùng đã thiết lập.
 4.  **Phát hiện vật thể (Object Detection)**: Nhận diện các vật dụng nguy hiểm trong khung hình như Dao, Kéo, Điện thoại.
 5.  **Định danh người (ReID)**: Theo dõi và duy tri ID của từng người qua nhiều camera khác nhau.
 
