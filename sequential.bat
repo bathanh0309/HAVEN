@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 REM HAVEN Sequential ReID - Full Features
 REM ADL + Colorful Pose + Object Detection + Hierarchical ReID
 REM cam1 -> cam2 -> cam3 -> cam4
@@ -43,4 +43,3 @@ echo.
 echo Output: D:\HAVEN\backend\outputs\log.csv
 echo.
 pause
-

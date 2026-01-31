@@ -1,4 +1,4 @@
-﻿"""
+"""
 HAVEN Multi-Camera Sequential Runner
 Full features: Pose + ADL + ReID
 

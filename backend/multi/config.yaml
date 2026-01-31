@@ -1,4 +1,4 @@
-﻿# ============================================================
+# ============================================================
 # HAVEN Multi-Camera Configuration
 # ============================================================
 # Unified config cho h thng multi-camera vi:
@@ -12,7 +12,7 @@
 # Th t x l: phu1 -> phu2 -> unk1 -> phu3 -> unk2 -> phu4 -> phu5 -> unk3
 # ============================================================
 cameras:
-  # --- CAM1: phu1.mp4 ---
+  # --- CAM1---
   - id: "cam1"
     name: "Camera 1 - Phu 1"
     enabled: true
@@ -22,7 +22,7 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM2: phu2.mp4 ---
+  # --- CAM2---
   - id: "cam2"
     name: "Camera 2 - Phu 2"
     enabled: true
@@ -32,8 +32,8 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM2: unk1.mp4 (ngi l 1) ---
-  - id: "cam2_unk1"
+  # --- CAM2---
+  - id: "cam2"
     name: "Camera 2 - Unknown 1"
     enabled: true
     source_type: "video"
@@ -42,7 +42,7 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM3: phu3.mp4 ---
+  # --- CAM3 ---
   - id: "cam3"
     name: "Camera 3 - Phu 3"
     enabled: true
@@ -52,8 +52,8 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM3: unk2.mp4 (ngi l 2) ---
-  - id: "cam3_unk2"
+  # --- CAM3 ---
+  - id: "cam3"
     name: "Camera 3 - Unknown 2"
     enabled: true
     source_type: "video"
@@ -62,7 +62,7 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM4: phu4.mp4 ---
+  # --- CAM4---
   - id: "cam4"
     name: "Camera 4 - Phu 4"
     enabled: true
@@ -72,8 +72,8 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
   
-  # --- CAM4: phu5.mp4 ---
-  - id: "cam4_phu5"
+  # --- CAM4---
+  - id: "cam4"
     name: "Camera 4 - Phu 5"
     enabled: true
     source_type: "video"
@@ -82,8 +82,8 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM4: unk3.mp4 (ngi l 3) ---
-  - id: "cam4_unk3"
+  # --- CAM4---
+  - id: "cam4"
     name: "Camera 4 - Unknown 3"
     enabled: true
     source_type: "video"
@@ -108,14 +108,12 @@ yolo:
 reid:
   # Matching threshold (0.0 - 1.0)
   # Lower = match easier, Higher = stricter
-  # 0.85 = VERY STRICT - Only near-identical persons match
-  threshold: 0.85
+  # 0.5 = BALANCED - Good for demo with varying angles/lighting
+  threshold: 0.5
   
-  # Update features every N frames
-  update_interval: 5
+  update_interval: 2 # 2 frame lưu đặc trưng 1 lần
   
-  # Max features to keep per person
-  max_features: 30
+  max_features: 100 # số lượng đặc trưng lưu
 
 # ============================================================
 # ADL - Simplified: WALKING / FALL_DOWN only

@@ -211,6 +211,6 @@ private_key.pem
 # ==================
 # Excluded Folders
 # ==================
-.agent/
+
 deployment/
 .github/

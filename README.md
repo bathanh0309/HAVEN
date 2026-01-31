@@ -1,4 +1,4 @@
-﻿# HAVEN: Home Activity Vision & Event Network
+# HAVEN: Home Activity Vision & Event Network
 
 Hệ thống giám sát thông minh hỗ trợ nhận diện hành vi ADL (Activity of Daily Living), phát hiện sự cố và cảnh báo an ninh bằng AI.
 

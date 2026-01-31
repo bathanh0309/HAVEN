@@ -27,7 +27,7 @@ cameras:
 inference:
   yolo:
     model: "yolov11n.pt"
-    conf_threshold: 0.8
+    conf_threshold: 0.5
     device: "cuda"
   
   pose:
