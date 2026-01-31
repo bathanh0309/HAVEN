@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN Backend - Main Entry Point
 =================================
 FastAPI application with secure camera streaming.

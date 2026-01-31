@@ -1,4 +1,4 @@
-
+﻿
 import cv2
 import threading
 import time
@@ -33,13 +33,13 @@ class StreamStats:
 class StreamManager:
 class StreamManager:
     """
-    Quản lý luồng video nâng cao với kiến trúc Non-Blocking.
+    Qun l lung video nng cao vi kin trc Non-Blocking.
     
-    Tính năng:
-    - Thread riêng biệt để đọc camera (tách biệt I/O).
-    - Chiến lược 'Latest Frame': Luôn giữ frame mới nhất, bỏ frame cũ để giảm độ trễ.
-    - Chuyển đổi luồng an toàn (Thread-safe).
-    - Tự động kết nối lại (Auto-reconnect).
+    Tnh nng:
+    - Thread ring bit  c camera (tch bit I/O).
+    - Chin lc 'Latest Frame': Lun gi frame mi nht, b frame c  gim  tr.
+    - Chuyn i lung an ton (Thread-safe).
+    - T ng kt ni li (Auto-reconnect).
     """
     
     _instance = None
@@ -74,7 +74,7 @@ class StreamManager:
         logger.info(f"StreamManager Initialized | Camera: {config.CAMERA_NAME}")
 
     def start(self):
-        """Bắt đầu worker thread đọc camera."""
+        """Bt u worker thread c camera."""
         if self.running: 
             return
         
@@ -88,7 +88,7 @@ class StreamManager:
         logger.info("Capture Worker Started")
 
     def stop(self):
-        """Dừng worker và giải phóng tài nguyên một cách an toàn."""
+        """Dng worker v gii phng ti nguyn mt cch an ton."""
         self.running = False
         if self.capture_thread:
             self.capture_thread.join(timeout=2.0)
@@ -98,8 +98,8 @@ class StreamManager:
     def switch_stream(self, stream_type: Literal["HD", "SD"]) -> bool:
     def switch_stream(self, stream_type: Literal["HD", "SD"]) -> bool:
         """
-        Yêu cầu chuyển đổi loại luồng (HD/SD).
-        Việc chuyển đổi thực tế sẽ diễn ra trong vòng lặp worker để đảm bảo an toàn thread.
+        Yu cu chuyn i loi lung (HD/SD).
+        Vic chuyn i thc t s din ra trong vng lp worker  m bo an ton thread.
         """
         if stream_type not in ["HD", "SD"]: return False
         
@@ -117,8 +117,8 @@ class StreamManager:
     def get_latest_frame(self) -> Optional[Tuple[np.ndarray, Dict[str, Any]]]:
     def get_latest_frame(self) -> Optional[Tuple[np.ndarray, Dict[str, Any]]]:
         """
-        Lấy frame mới nhất từ hàng đợi (Non-blocking).
-        Trả về: (frame_bgr, metadata) hoặc None nếu không có frame mới.
+        Ly frame mi nht t hng i (Non-blocking).
+        Tr v: (frame_bgr, metadata) hoc None nu khng c frame mi.
         """
         try:
             # Get latest, but put it back for other consumers? 
@@ -138,7 +138,7 @@ class StreamManager:
             return None
 
     def get_stats(self) -> Dict[str, Any]:
-        """Lấy thông tin thống kê trạng thái hiện tại của stream."""
+        """Ly thng tin thng k trng thi hin ti ca stream."""
         return {
             "connected": self.stats.connected,
             "stream": self.stats.current_stream,
@@ -154,12 +154,12 @@ class StreamManager:
     def _worker_loop(self):
     def _worker_loop(self):
         """
-        Vòng lặp chính của worker thread:
-        1. Duy trì kết nối Camera (Auto-reconnect).
-        2. Đọc Frame từ RTSP.
-        3. Giới hạn tốc độ đọc (FPS Limit).
-        4. Resize ảnh nếu cần (để tối ưu hiệu năng).
-        5. Đẩy frame vào hàng đợi (Queue) cho consumer.
+        Vng lp chnh ca worker thread:
+        1. Duy tr kt ni Camera (Auto-reconnect).
+        2. c Frame t RTSP.
+        3. Gii hn tc  c (FPS Limit).
+        4. Resize nh nu cn ( ti u hiu nng).
+        5. y frame vo hng i (Queue) cho consumer.
         """
         reconnect_delay = 1
         fps_counter = 0
@@ -239,7 +239,7 @@ class StreamManager:
                 time.sleep(1)
 
     def _connect(self) -> bool:
-        """Thực hiện kết nối thực tế tới Camera qua OpenCV."""
+        """Thc hin kt ni thc t ti Camera qua OpenCV."""
         url = self.config.get_stream_url(self.stats.current_stream)
         logger.info(f"Connecting to {self.stats.current_stream}...")
         try:
@@ -260,7 +260,7 @@ class StreamManager:
             return False
 
     def _release_capture(self):
-        """Giải phóng object VideoCapture."""
+        """Gii phng object VideoCapture."""
         if self.capture:
             self.capture.release()
             self.capture = None
@@ -268,8 +268,9 @@ class StreamManager:
 # Helper for Dependency Injection
 _global_mgr = None
 def get_stream_manager(config: CameraSettings = None) -> StreamManager:
-    """Trả về singleton instance của StreamManager."""
+    """Tr v singleton instance ca StreamManager."""
     global _global_mgr
     if _global_mgr is None and config:
         _global_mgr = StreamManager(config)
     return _global_mgr
+

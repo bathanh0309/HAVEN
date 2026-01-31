@@ -1,4 +1,4 @@
-"""
+﻿"""
 Core data structures for HAVEN ReID system.
 Based on tracklet-level matching architecture.
 """
@@ -222,3 +222,4 @@ class ReIDMetrics:
         print(f"  Appearance: {self.appearance_matches}")
         print(f"  Gait Override (clothing change): {self.gait_override_count}")
         print(f"\nSpatiotemporal Rejections: {self.st_rejections}")
+

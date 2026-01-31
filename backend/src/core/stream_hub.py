@@ -1,4 +1,4 @@
-"""
+﻿"""
 StreamHub - Multi-camera registry and lifecycle manager
 Singleton that manages multiple StreamWorker instances keyed by camera_id.
 """
@@ -17,7 +17,7 @@ class StreamHub:
     Responsibilities:
     - Register cameras with unique camera_id
     - Start/stop all workers
-    - Provide lookup: camera_id → StreamWorker
+    - Provide lookup: camera_id  StreamWorker
     - Aggregate status from all cameras
     """
     
@@ -46,7 +46,7 @@ class StreamHub:
         self._workers[config.camera_id] = worker
         
         logger.info(
-            f"Registered camera: {config.camera_id} → {config.source} "
+            f"Registered camera: {config.camera_id}  {config.source} "
             f"(AI: {config.ai_enabled})"
         )
         return True
@@ -108,3 +108,4 @@ def get_stream_hub() -> StreamHub:
     if _stream_hub_instance is None:
         _stream_hub_instance = StreamHub()
     return _stream_hub_instance
+

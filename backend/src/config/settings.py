@@ -1,4 +1,4 @@
-"""
+﻿"""
 Configuration loader with environment variable interpolation.
 """
 import os
@@ -147,3 +147,4 @@ if __name__ == "__main__":
             print(f"  - {cam.name} ({cam.type}): {'enabled' if cam.enabled else 'disabled'}")
     except Exception as e:
         print(f"Error loading config: {e}")
+

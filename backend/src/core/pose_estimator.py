@@ -1,4 +1,4 @@
-"""
+﻿"""
 YOLO pose estimation wrapper.
 """
 from ultralytics import YOLO
@@ -150,3 +150,4 @@ if __name__ == "__main__":
     for i, pose in enumerate(poses):
         posture = estimator.get_posture(pose['keypoints'])
         print(f"  Person {i}: posture={posture}, visible_kpts={pose['visible_keypoints']}")
+

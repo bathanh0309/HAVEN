@@ -1,7 +1,7 @@
-"""
+﻿"""
 Unit Tests for Global ID Manager
 
-Test dual-master logic và các edge cases
+Test dual-master logic v cc edge cases
 """
 
 import sys
@@ -40,11 +40,11 @@ class TestGlobalIDManager(unittest.TestCase):
     
     def test_case1_cam1_creates_cam2_matches(self):
         """
-        Test Case 1: Cam1 tạo ID=1, Cam2 match ra ID=1
+        Test Case 1: Cam1 to ID=1, Cam2 match ra ID=1
         
         Flow:
-        t=0 : Cam1 thấy person A → tạo Global ID = 1
-        t=10: Cam2 thấy person A → match ra Global ID = 1
+        t=0 : Cam1 thy person A  to Global ID = 1
+        t=10: Cam2 thy person A  match ra Global ID = 1
         """
         print("\n" + "="*60)
         print("TEST CASE 1: Cam1 creates, Cam2 matches")
@@ -66,7 +66,7 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam1] Track 1 → Global ID {gid1} ({reason1})")
+        print(f"[cam1] Track 1  Global ID {gid1} ({reason1})")
         
         self.assertEqual(gid1, 1, "Cam1 should create Global ID = 1")
         self.assertIn("new_identity", reason1)
@@ -86,20 +86,20 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam2] Track 1 → Global ID {gid2} ({reason2}, score={score2:.3f})")
+        print(f"[cam2] Track 1  Global ID {gid2} ({reason2}, score={score2:.3f})")
         
         self.assertEqual(gid2, 1, "Cam2 should match to Global ID = 1")
         self.assertGreater(score2, 0.7, "Similarity should be high")
         
-        print("✅ PASSED: Cam1 creates, Cam2 matches correctly\n")
+        print(" PASSED: Cam1 creates, Cam2 matches correctly\n")
     
     def test_case2_cam2_creates_cam1_matches(self):
         """
-        Test Case 2: Cam2 tạo ID=1 (cam1 miss), Cam1 match ra ID=1
+        Test Case 2: Cam2 to ID=1 (cam1 miss), Cam1 match ra ID=1
         
         Flow:
-        t=0 : Cam2 thấy person B (cam1 miss) → tạo Global ID = 1
-        t=10: Cam1 thấy person B → match ra Global ID = 1
+        t=0 : Cam2 thy person B (cam1 miss)  to Global ID = 1
+        t=10: Cam1 thy person B  match ra Global ID = 1
         """
         print("\n" + "="*60)
         print("TEST CASE 2: Cam2 creates (cam1 miss), Cam1 matches")
@@ -121,7 +121,7 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam2] Track 1 → Global ID {gid1} ({reason1})")
+        print(f"[cam2] Track 1  Global ID {gid1} ({reason1})")
         
         self.assertEqual(gid1, 1, "Cam2 should create Global ID = 1")
         self.assertIn("new_identity", reason1)
@@ -141,19 +141,19 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam1] Track 1 → Global ID {gid2} ({reason2}, score={score2:.3f})")
+        print(f"[cam1] Track 1  Global ID {gid2} ({reason2}, score={score2:.3f})")
         
         self.assertEqual(gid2, 1, "Cam1 should match to Global ID = 1 (created by Cam2)")
         self.assertGreater(score2, 0.7, "Similarity should be high")
         
-        print("✅ PASSED: Cam2 creates, Cam1 matches correctly\n")
+        print(" PASSED: Cam2 creates, Cam1 matches correctly\n")
     
     def test_case3_non_master_cannot_create(self):
         """
-        Test Case 3: Cam3 thấy người mới không match → không tạo ID (temp)
+        Test Case 3: Cam3 thy ngi mi khng match  khng to ID (temp)
         
         Flow:
-        t=0 : Cam3 (non-master) thấy person C → TEMP ID = 0 (chờ master)
+        t=0 : Cam3 (non-master) thy person C  TEMP ID = 0 (ch master)
         """
         print("\n" + "="*60)
         print("TEST CASE 3: Non-master camera cannot create new ID")
@@ -182,20 +182,20 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam3] Track 1 → Global ID {gid} ({reason})")
+        print(f"[cam3] Track 1  Global ID {gid} ({reason})")
         
         self.assertEqual(gid, 0, "Non-master should assign TEMP ID = 0")
         self.assertIn("wait_master", reason)
         
-        print("✅ PASSED: Non-master camera correctly assigns TEMP ID\n")
+        print(" PASSED: Non-master camera correctly assigns TEMP ID\n")
     
     def test_case4_deterministic_tie_break(self):
         """
-        Test Case 4: Deterministic tie-break khi 2 candidates gần bằng score
+        Test Case 4: Deterministic tie-break khi 2 candidates gn bng score
         
         Flow:
-        - Tạo 2 IDs với embeddings tương tự nhau
-        - Query embedding gần cả 2 (ambiguous)
+        - To 2 IDs vi embeddings tng t nhau
+        - Query embedding gn c 2 (ambiguous)
         - Test margin threshold
         """
         print("\n" + "="*60)
@@ -254,21 +254,21 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam1] Track 3 → Global ID {gid3} ({reason3}, score={score3:.3f})")
+        print(f"[cam1] Track 3  Global ID {gid3} ({reason3}, score={score3:.3f})")
         
         # Should create new ID when ambiguous (conservative)
         self.assertNotIn(gid3, [gid1, gid2], "Should create new ID when ambiguous")
         
-        print("✅ PASSED: Ambiguous case handled correctly\n")
+        print(" PASSED: Ambiguous case handled correctly\n")
     
     def test_case5_spatiotemporal_filter(self):
         """
         Test Case 5: Spatiotemporal filtering
         
         Flow:
-        - Person xuất hiện ở cam1
-        - Sau 2s xuất hiện ở cam2 (quá nhanh, min_time = 5s)
-        - Should reject match và tạo ID mới
+        - Person xut hin  cam1
+        - Sau 2s xut hin  cam2 (qu nhanh, min_time = 5s)
+        - Should reject match v to ID mi
         """
         print("\n" + "="*60)
         print("TEST CASE 5: Spatiotemporal filtering")
@@ -290,7 +290,7 @@ class TestGlobalIDManager(unittest.TestCase):
             bbox_size=100
         )
         
-        print(f"[cam1] t=0s → Global ID {gid1}")
+        print(f"[cam1] t=0s  Global ID {gid1}")
         
         # Cam2 at t=2s (too fast! min_time=5s)
         gid2, reason2, score2 = self.manager.assign_global_id(
@@ -305,14 +305,14 @@ class TestGlobalIDManager(unittest.TestCase):
             last_seen_info={'camera': 1, 'time': 0.0}
         )
         
-        print(f"[cam2] t=2s → Global ID {gid2} ({reason2}, score={score2:.3f})")
+        print(f"[cam2] t=2s  Global ID {gid2} ({reason2}, score={score2:.3f})")
         
         # Should create new ID due to spatiotemporal violation
         # (Cannot teleport from cam1 to cam2 in 2 seconds)
         if gid2 != gid1:
-            print("✅ PASSED: Spatiotemporal filter rejected impossible transition")
+            print(" PASSED: Spatiotemporal filter rejected impossible transition")
         else:
-            print("⚠️  Note: Matched despite spatiotemporal constraint (may need tuning)")
+            print("  Note: Matched despite spatiotemporal constraint (may need tuning)")
         
         print()
     
@@ -349,7 +349,7 @@ class TestGlobalIDManager(unittest.TestCase):
         self.assertGreater(metrics['total_global_ids'], 0)
         self.assertGreater(metrics['ids_created'], 0)
         
-        print("✅ PASSED: Metrics tracking works\n")
+        print(" PASSED: Metrics tracking works\n")
 
 
 def run_tests():
@@ -374,9 +374,9 @@ def run_tests():
     print(f"Errors: {len(result.errors)}")
     
     if result.wasSuccessful():
-        print("\n✅ ALL TESTS PASSED!")
+        print("\n ALL TESTS PASSED!")
     else:
-        print("\n❌ SOME TESTS FAILED")
+        print("\n SOME TESTS FAILED")
     
     print("="*60)
     
@@ -386,3 +386,4 @@ def run_tests():
 if __name__ == '__main__':
     success = run_tests()
     sys.exit(0 if success else 1)
+

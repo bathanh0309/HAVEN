@@ -1,7 +1,7 @@
-"""
+﻿"""
 HAVEN ADL - Rule Engine
 =======================
-State Machine và Logic phát hiện sự kiện (Fall Down, Bed Exit).
+State Machine v Logic pht hin s kin (Fall Down, Bed Exit).
 """
 
 import time
@@ -20,13 +20,13 @@ class RuleEngine:
         
     def process_track(self, track: TrackHistory, frame_data: FrameData) -> List[str]:
         """
-        Cập nhật state của track và trả về danh sách sự kiện phát hiện (nếu có).
+        Cp nht state ca track v tr v danh sch s kin pht hin (nu c).
         """
         events = []
         new_state = frame_data.posture
         
         # 1. Update Buffer check
-        # Lấy state cũ
+        # Ly state c
         prev_state = track.current_state
         
         # Update state duration
@@ -55,18 +55,18 @@ class RuleEngine:
 
     def _check_fall_down(self, track: TrackHistory) -> bool:
         """
-        Kiểm tra sự kiện ngã.
-        Điều kiện:
-        1. Hiện tại là LAYING và đã duy trì đủ lâu (confirm time).
-        2. Trước đó (trong khoảng window) là STANDING.
+        Kim tra s kin ng.
+        iu kin:
+        1. Hin ti l LAYING v  duy tr  lu (confirm time).
+        2. Trc  (trong khong window) l STANDING.
         """
         # Condition 1: Stable LAYING
         if track.current_state != "LAYING": return False
-        if track.state_duration < 1.0: return False # Chưa đủ stable (dạng instant)
+        if track.state_duration < 1.0: return False # Cha  stable (dng instant)
         
         # Condition 2: Check history for Standing
         # Look back 1-2 seconds
-        # Tìm điểm bắt đầu LAYING
+        # Tm im bt u LAYING
         # Buffer: [Stand, Stand, ... , Laying, Laying, Laying]
         # Check transition speed
         
@@ -77,7 +77,7 @@ class RuleEngine:
         current_ts = float(time.time())
         limit_ts = current_ts - 3.0 # Look back 3s
         
-        # Đếm frame LAYING
+        # m frame LAYING
         laying_frames = 0
         
         for frame in reversed(track.buffer):
@@ -101,3 +101,4 @@ class RuleEngine:
 
     def _set_cooldown(self, track: TrackHistory, event_name: str, duration: float):
         track.cooldowns[event_name] = time.time()
+

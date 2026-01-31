@@ -1,6 +1,6 @@
-@echo off
+﻿@echo off
 REM HAVEN Multi-Camera ReID System Runner
-REM Double-click để chạy!
+REM Double-click  chy!
 
 echo ============================================================
 echo HAVEN Multi-Camera Person Re-Identification System
@@ -28,3 +28,4 @@ echo ============================================================
 echo System stopped
 echo ============================================================
 pause
+

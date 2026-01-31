@@ -1,4 +1,4 @@
-"""
+﻿"""
 Video Stream Abstraction
 
 Supports:
@@ -243,3 +243,4 @@ class VideoStream:
     def __del__(self):
         """Cleanup"""
         self.release()
+

@@ -1,4 +1,4 @@
-"""
+﻿"""
 StreamWorker - Per-camera capture + inference thread
 Handles one video source (MP4 or RTSP), runs inference once per frame,
 stores latest packet for multiple consumers (non-destructive reads).
@@ -262,3 +262,4 @@ class StreamWorker:
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), self.config.jpeg_quality]
         _, buffer = cv2.imencode('.jpg', frame, encode_param)
         return base64.b64encode(buffer).decode('utf-8')
+

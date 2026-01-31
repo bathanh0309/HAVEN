@@ -1,4 +1,4 @@
-"""
+﻿"""
 Color Histogram ReID - Simple & Effective
 Based on step4-reid.py
 """
@@ -72,7 +72,7 @@ class MasterSlaveReIDDB:
             'cameras': {cam_id}
         }
         
-        print(f"   🆕 G-ID {new_id} created in {cam_id.upper()}")
+        print(f"    G-ID {new_id} created in {cam_id.upper()}")
         return new_id
     
     def match_only(self, person_crop, cam_id):
@@ -102,7 +102,7 @@ class MasterSlaveReIDDB:
             # Track cameras
             if cam_id not in self.persons[best_id]['cameras']:
                 self.persons[best_id]['cameras'].add(cam_id)
-                print(f"   🔗 G-ID {best_id} matched in {cam_id.upper()} (sim={best_sim:.2f})")
+                print(f"    G-ID {best_id} matched in {cam_id.upper()} (sim={best_sim:.2f})")
             
             return best_id
         
@@ -111,9 +111,10 @@ class MasterSlaveReIDDB:
     def summary(self):
         """Print summary."""
         print(f"\n{'='*60}")
-        print(f"📋 GLOBAL ID SUMMARY")
+        print(f" GLOBAL ID SUMMARY")
         print(f"{'='*60}")
         print(f"Total Persons: {len(self.persons)}")
         for gid, info in sorted(self.persons.items()):
-            cams = " → ".join(sorted(info['cameras']))
+            cams = "  ".join(sorted(info['cameras']))
             print(f"  Person-{gid}: {cams}")
+

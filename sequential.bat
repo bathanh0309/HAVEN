@@ -1,38 +1,46 @@
-@echo off
-REM ============================================================
-REM HAVEN Multi-Camera Sequential Processing
-REM ============================================================
-REM Features: Pose + ADL + ReID (Color Histogram)
-REM Videos: Cam1 -> Cam2 -> Cam3 -> Cam4
-REM ============================================================
-
-cd /d %~dp0
+﻿@echo off
+REM HAVEN Sequential ReID - Full Features
+REM ADL + Colorful Pose + Object Detection + Hierarchical ReID
+REM cam1 -> cam2 -> cam3 -> cam4
 
 echo ============================================================
-echo HAVEN Multi-Camera Sequential Processing
+echo HAVEN Sequential ReID (Full Features)
 echo ============================================================
 echo.
+echo Features:
+echo   - Pose Skeleton (Colorful)
+echo   - ADL Detection (SITTING, STANDING, FALL_DOWN)
+echo   - Dangerous Objects (knife, bat, racket)
+echo   - Hierarchical ReID (cam1=MASTER, cam2-4=SLAVE)
+echo.
 
-REM Check venv
-if exist ".venv\Scripts\activate.bat" (
+REM Activate virtual environment if exists
+if exist .venv\Scripts\activate.bat (
     echo Activating virtual environment...
     call .venv\Scripts\activate.bat
-    echo.
+) else (
+    echo Warning: Virtual environment not found
 )
 
-REM Run
-echo Starting...
-echo Features: Pose + ADL + ReID
-echo Cameras: Cam1 -^> Cam2 -^> Cam3 -^> Cam4
 echo.
+echo Processing: cam1 then cam2 then cam3 then cam4
+echo.
+echo Controls:
+echo   SPACE = Pause/Resume
+echo   N     = Skip to next camera
+echo   Q     = Quit
+echo   G     = Record MP4
+echo.
+
+REM Run the full-feature runner from backend/multi
 python backend\multi\run.py
 
-if %ERRORLEVEL% NEQ 0 (
-    echo.
-    echo [ERROR] Script failed!
-    echo.
-)
-
 echo.
-echo Done!
+echo ============================================================
+echo Sequential processing complete!
+echo ============================================================
+echo.
+echo Output: D:\HAVEN\backend\outputs\log.csv
+echo.
 pause
+

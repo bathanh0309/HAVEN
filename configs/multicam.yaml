@@ -1,4 +1,4 @@
-# HAVEN Multi-Camera ReID Configuration
+﻿# HAVEN Multi-Camera ReID Configuration
 # Version: 2.0 - Dual Master Camera Support
 
 # ============================================================
@@ -166,6 +166,11 @@ reid:
   # ID reuse policy
   reuse_window: 7200  # Seconds before an ID can be reused (2 hours)
   
+  # Memory settings (for GlobalIDManager)
+  memory:
+    max_prototypes: 10
+    ema_alpha: 0.3
+  
   # Cooldown to prevent rapid ID switching
   cooldown:
     enabled: true
@@ -190,6 +195,7 @@ sync:
 # ============================================================
 yolo:
   model: "yolo11n-pose.pt"
+  pose_model: "yolo11n-pose.pt"
   conf_threshold: 0.4
   iou_threshold: 0.45
 
@@ -238,6 +244,7 @@ visualization:
 output:
   # Output directory
   out_dir: "D:/HAVEN/backend/outputs/multicam"
+  dir: "D:/HAVEN/backend/outputs/multicam"
   
   # Video recording
   write_video: true
@@ -297,3 +304,4 @@ debug:
   print_similarity_scores: true  # Print all similarity scores
   print_gallery_state: false  # Print gallery contents periodically
   profile_performance: false  # Profile execution time
+

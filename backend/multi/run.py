@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN Multi-Camera Sequential Runner
 Full features: Pose + ADL + ReID
 
@@ -300,12 +300,16 @@ class SequentialRunner:
                         
                         # === BBOX COLOR LOGIC ===
                         # Priority: FALL_DOWN (RED) > Unmatched (RED) > Matched (ID color)
+                        is_intruder = False
                         if state.current_posture == "FALL_DOWN":
                             bbox_color = (0, 0, 255)  # RED for fall
                         elif state.global_id:
                             bbox_color = get_color_for_id(state.global_id)  # ID color
                         else:
                             bbox_color = (0, 0, 255)  # RED for unmatched
+                            # Check if this is cam4 (strict zone) - INTRUDER!
+                            if "cam4" in cam_id.lower():
+                                is_intruder = True
                         
                         # Bbox
                         cv2.rectangle(display, (x1_s, y1_s), (x2_s, y2_s), bbox_color, 3)
@@ -334,6 +338,20 @@ class SequentialRunner:
                         cv2.rectangle(display, (x1_s, y1_s-th-10), (x1_s+tw+10, y1_s), bbox_color, -1)
                         cv2.putText(display, label, (x1_s+5, y1_s-5),
                                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                        
+                        # === INTRUDER ALERT (CAM4 ONLY) ===
+                        if is_intruder:
+                            # Flashing red border
+                            if frame_idx % 10 < 5:
+                                cv2.rectangle(display, (0, 0), (self.display_w-1, self.display_h-1), (0, 0, 255), 8)
+                            # Large warning text
+                            warning_text = "!! INTRUDER DETECTED !!"
+                            (wt, ht), _ = cv2.getTextSize(warning_text, cv2.FONT_HERSHEY_SIMPLEX, 1.5, 3)
+                            wx = (self.display_w - wt) // 2
+                            wy = 80
+                            cv2.rectangle(display, (wx-10, wy-ht-10), (wx+wt+10, wy+10), (0, 0, 200), -1)
+                            cv2.putText(display, warning_text, (wx, wy),
+                                       cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
                 
                 # Lost tracks
                 lost_tracks = set(track_states.keys()) - current_track_ids if 'current_track_ids' in locals() else set()
@@ -463,3 +481,4 @@ if __name__ == "__main__":
         print(f"\nError: {e}")
         runner.cleanup()
         raise
+

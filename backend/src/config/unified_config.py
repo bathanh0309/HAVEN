@@ -1,4 +1,4 @@
-"""
+﻿"""
 Unified Configuration for HAVEN Project
 ========================================
 This config supports both RTSP camera streams and video file processing.
@@ -131,3 +131,4 @@ def is_feature_enabled(feature: str) -> bool:
 def get_model_path(model_name: str) -> str:
     """Get absolute path to a model file."""
     return MODEL_PATHS.get(model_name, "")
+

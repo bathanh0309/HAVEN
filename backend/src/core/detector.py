@@ -1,4 +1,4 @@
-"""
+﻿"""
 YOLO person detector wrapper.
 """
 from ultralytics import YOLO
@@ -84,3 +84,4 @@ if __name__ == "__main__":
     print(f"Detected {len(detections)} persons")
     for i, det in enumerate(detections):
         print(f"  Person {i}: bbox={det['bbox']}, conf={det['conf']:.2f}")
+

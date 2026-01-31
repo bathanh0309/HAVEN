@@ -1,4 +1,4 @@
-"""
+﻿"""
 Tracklet aggregation - Convert ByteTrack output to TrackletSummary.
 Based on multi-frame sampling for stable embeddings.
 """
@@ -11,7 +11,7 @@ from .data_structures import TrackletSummary
 def build_tracklet(track_id: int, frame_data: List[Dict], config, 
                    camera_id: str) -> TrackletSummary:
     """
-    Aggregate multiple frames → single tracklet.
+    Aggregate multiple frames  single tracklet.
     
     Key steps:
     1. Sample K high-quality frames
@@ -249,3 +249,4 @@ if __name__ == "__main__":
     
     is_valid, reason = quality_gate(tracklet, config)
     print(f"  Valid: {is_valid} ({reason})")
+

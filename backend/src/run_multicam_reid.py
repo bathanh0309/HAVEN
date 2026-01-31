@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN Multi-Camera ReID Runner
 
 Entrypoint for running multi-camera person re-identification
@@ -322,7 +322,7 @@ class MultiCameraReIDRunner:
     
     def run(self):
         """Run multi-camera processing."""
-        print("\n🚀 Starting multi-camera processing...")
+        print("\n Starting multi-camera processing...")
         print("Controls: Q=Quit, SPACE=Pause, G=Record MP4\n")
         
         cv2.namedWindow("HAVEN Multi-Camera ReID", cv2.WINDOW_NORMAL)
@@ -382,9 +382,9 @@ class MultiCameraReIDRunner:
                             
                             # Log
                             if reason == MatchReason.MASTER_NEW:
-                                print(f"🆕 [cam{cam_id}] Track {track_id} → Global ID {global_id} (NEW)")
+                                print(f" [cam{cam_id}] Track {track_id}  Global ID {global_id} (NEW)")
                             elif reason == MatchReason.MATCHED:
-                                print(f"✅ [cam{cam_id}] Track {track_id} → Global ID {global_id} (MATCH: {score:.2f})")
+                                print(f" [cam{cam_id}] Track {track_id}  Global ID {global_id} (MATCH: {score:.2f})")
                             
                             # Draw
                             self._draw_detection(frame, bbox, global_id, track_id, reason, kpts)
@@ -432,7 +432,7 @@ class MultiCameraReIDRunner:
             stream.release()
         cv2.destroyAllWindows()
         self.global_id_manager.print_summary()
-        print("\n✅ Complete!")
+        print("\n Complete!")
 
 
 def main():
@@ -458,9 +458,10 @@ def main():
     try:
         runner.run()
     except KeyboardInterrupt:
-        print("\n⚠️ Stopped by user")
+        print("\n Stopped by user")
         runner._cleanup()
 
 
 if __name__ == "__main__":
     main()
+

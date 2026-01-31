@@ -146,6 +146,9 @@ snapshots/
 *.png
 !frontend/static/*.jpg
 !frontend/static/*.png
+!backend/outputs/*.png
+!backend/outputs/*.jpg
+!demo.mp4
 
 # ==================
 # Database & Data Files
@@ -168,7 +171,6 @@ dist/
 # ==================
 # Test recordings
 test_recordings/
-*.mp4
 *.avi
 
 # Coverage reports

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Object Detection Module for HAVEN
 ==================================
 Detect and classify household objects and items.
@@ -102,3 +102,4 @@ class ObjectDetector:
             "count": len(objects),
             "classes": list(set(obj["class"] for obj in objects))
         }
+

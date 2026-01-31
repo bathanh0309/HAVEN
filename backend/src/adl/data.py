@@ -1,7 +1,7 @@
-"""
+﻿"""
 HAVEN ADL - Data Structures
 ===========================
-Mô hình dữ liệu cho hệ thống ADL.
+M hnh d liu cho h thng ADL.
 """
 
 from typing import List, Dict, Deque, Optional
@@ -17,7 +17,7 @@ class Keypoint(BaseModel):
     name: str = ""
 
 class FrameData(BaseModel):
-    """Dữ liệu của một track ID tại một thời điểm (frame)"""
+    """D liu ca mt track ID ti mt thi im (frame)"""
     timestamp: float
     bbox: List[float] # [x1, y1, x2, y2]
     keypoints: List[List[float]] # [[x,y,conf], ...]
@@ -35,7 +35,7 @@ class FrameData(BaseModel):
     hand_up: bool = False
 
 class TrackHistory:
-    """Lịch sử di chuyển và trạng thái của một người (Track ID)"""
+    """Lch s di chuyn v trng thi ca mt ngi (Track ID)"""
     def __init__(self, track_id: int, maxlen: int = 150): # 5s @ 30fps
         self.track_id = track_id
         self.buffer: Deque[FrameData] = deque(maxlen=maxlen)
@@ -53,7 +53,7 @@ class TrackHistory:
         return self.buffer[-1] if self.buffer else None
         
     def get_average_features(self, window: int = 10):
-        """Lấy giá trị trung bình của features trong window frame gần nhất"""
+        """Ly gi tr trung bnh ca features trong window frame gn nht"""
         if len(self.buffer) < window: return None
         
         avg_angle = 0
@@ -71,3 +71,4 @@ class TrackHistory:
             "torso_angle": avg_angle / count,
             "velocity": avg_velocity / count
         }
+

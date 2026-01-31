@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN GlobalIDManager - Dual-Master Logic for Multi-Camera ReID
 
 Key Features:
@@ -383,3 +383,4 @@ class GlobalIDManager:
         print(f"Non-Master Temp IDs: {s['non_master_temp']}")
         print(f"Total Tracks Assigned: {s['total_tracks']}")
         print("=" * 60)
+

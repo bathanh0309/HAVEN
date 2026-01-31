@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN API Routes
 ================
 FastAPI endpoints for camera streaming and control.
@@ -32,8 +32,8 @@ _cached_ai_engine = None
 
 def get_deps():
     """
-    Lấy các instance singleton của các phụ thuộc (dependencies).
-    Cấu hình và các trình quản lý (StreamManager, AIEngine) chỉ được tải MỘT LẦN và lưu vào cache.
+    Ly cc instance singleton ca cc ph thuc (dependencies).
+    Cu hnh v cc trnh qun l (StreamManager, AIEngine) ch c ti MT LN v lu vo cache.
     """
     global _cached_config, _cached_stream_mgr, _cached_ai_engine
     
@@ -55,8 +55,8 @@ def get_deps():
 @router.get("/api/health")
 async def health_check():
     """
-    Kiểm tra sức khỏe hệ thống API.
-    Trả về thông tin kết nối camera, FPS hiện tại và cấu hình.
+    Kim tra sc khe h thng API.
+    Tr v thng tin kt ni camera, FPS hin ti v cu hnh.
     """
     stream, _, config = get_deps()
     stats = stream.get_stats()
@@ -74,8 +74,8 @@ async def health_check():
 @router.post("/api/stream/switch")
 async def switch_stream(stream: Literal["HD", "SD"] = Query(...)):
     """
-    Chuyển đổi luồng video giữa HD và SD.
-    Yêu cầu StreamManager thực hiện việc chuyển đổi kết nối RTSP.
+    Chuyn i lung video gia HD v SD.
+    Yu cu StreamManager thc hin vic chuyn i kt ni RTSP.
     """
     stream_mgr, _, _ = get_deps()
     success = stream_mgr.switch_stream(stream)
@@ -88,8 +88,8 @@ async def switch_stream(stream: Literal["HD", "SD"] = Query(...)):
 @router.get("/video_feed")
 async def video_feed(stream: Optional[str] = None, ai: bool = True):
     """
-    Endpoint streaming MJPEG (dùng cho các trình duyệt/client cũ).
-    Lưu ý: Endpoint này không hỗ trợ gửi metadata (box, confidence) tách biệt như WebSocket.
+    Endpoint streaming MJPEG (dng cho cc trnh duyt/client c).
+    Lu : Endpoint ny khng h tr gi metadata (box, confidence) tch bit nh WebSocket.
     """
     stream_mgr, ai_engine, config = get_deps()
     
@@ -97,7 +97,7 @@ async def video_feed(stream: Optional[str] = None, ai: bool = True):
         stream_mgr.switch_stream(stream.upper())
 
     def frame_gen():
-        """Generator đồng bộ để tạo các frame MJPEG."""
+        """Generator ng b  to cc frame MJPEG."""
         error_count = 0
         max_errors = 10
         
@@ -158,8 +158,8 @@ async def video_feed(stream: Optional[str] = None, ai: bool = True):
 async def websocket_stream(websocket: WebSocket):
     """
     Endpoint streaming qua WebSocket.
-    Gửi gói tin JSON chứa hình ảnh (Base64) VÀ Metadata (Detections, FPS, TS).
-    Đây là phương thức chính để truyền dữ liệu cho Frontend mới.
+    Gi gi tin JSON cha hnh nh (Base64) V Metadata (Detections, FPS, TS).
+    y l phng thc chnh  truyn d liu cho Frontend mi.
     """
     await websocket.accept()
     stream_mgr, ai_engine, config = get_deps()
@@ -242,7 +242,7 @@ async def websocket_stream(websocket: WebSocket):
 # ==================
 def init_routes(mgr, cfg):
     """
-    Khởi tạo các singleton dependency từ main.py.
+    Khi to cc singleton dependency t main.py.
     """
     global _cached_config, _cached_stream_mgr, _cached_ai_engine
     _cached_config = cfg

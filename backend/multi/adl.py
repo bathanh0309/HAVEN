@@ -1,4 +1,4 @@
-"""
+﻿"""
 ADL (Activities of Daily Living) Classification
 Posture detection + Event detection
 """
@@ -118,7 +118,7 @@ class TrackState:
                 
                 # Only detect FALL_DOWN event
                 if voted == "FALL_DOWN" and self.prev_posture not in ["FALL_DOWN", ""]:
-                    self.add_event("⚠️ FALL DETECTED")
+                    self.add_event(" FALL DETECTED")
         else:
             self.current_posture = posture
     
@@ -223,3 +223,4 @@ def classify_posture(keypoints, bbox, track_state, frame_height):
     
     # Default: No label (not enough info or standing still)
     return ""
+

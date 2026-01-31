@@ -1,4 +1,4 @@
-"""
+﻿"""
 SQLAlchemy database schema for HAVEN ReID system.
 """
 from datetime import datetime
@@ -151,3 +151,4 @@ def get_session(db_path: str = "haven_reid.db"):
 if __name__ == "__main__":
     # Test: Create database
     create_database("test_haven.db")
+

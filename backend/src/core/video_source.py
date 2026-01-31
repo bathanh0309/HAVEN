@@ -1,4 +1,4 @@
-"""
+﻿"""
 Unified video source handler (local files + RTSP).
 """
 import cv2
@@ -110,3 +110,4 @@ if __name__ == "__main__":
         if ret:
             print(f"Successfully read frame: {frame.shape}")
         source.release()
+

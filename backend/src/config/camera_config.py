@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN Camera Configuration Loader
 =================================
 Secure configuration management using Pydantic Settings.
@@ -92,7 +92,7 @@ class CameraSettings(BaseSettings):
     @field_validator("CAMERA_IP")
     @classmethod
     def validate_ip(cls, v: str) -> str:
-        """Kiểm tra định dạng địa chỉ IP (xxx.xxx.xxx.xxx)."""
+        """Kim tra nh dng a ch IP (xxx.xxx.xxx.xxx)."""
         parts = v.split(".")
         if len(parts) != 4:
             raise ValueError("IP must be in format: xxx.xxx.xxx.xxx")
@@ -108,7 +108,7 @@ class CameraSettings(BaseSettings):
     @field_validator("DEFAULT_STREAM")
     @classmethod
     def validate_stream_type(cls, v: str) -> str:
-        """Chuẩn hóa loại luồng thành chữ in hoa (HD/SD)."""
+        """Chun ha loi lung thnh ch in hoa (HD/SD)."""
         return v.upper()
     
     # ==================
@@ -131,7 +131,7 @@ class CameraSettings(BaseSettings):
     # ==================
     def get_stream_url(self, stream_type: Literal["HD", "SD"]) -> str:
         """
-        Lấy URL RTSP đầy đủ (bao gồm user/pass) cho loại luồng tương ứng.
+        Ly URL RTSP y  (bao gm user/pass) cho loi lung tng ng.
         """
         stream_type = stream_type.upper()
         if stream_type == "HD":
@@ -143,8 +143,8 @@ class CameraSettings(BaseSettings):
     
     def get_roi_coords(self, frame_width: int, frame_height: int) -> tuple:
         """
-        Tính toán tọa độ pixel của vùng ROI từ các giá trị phần trăm (0-1).
-        Trả về (x1, y1, x2, y2).
+        Tnh ton ta  pixel ca vng ROI t cc gi tr phn trm (0-1).
+        Tr v (x1, y1, x2, y2).
         """
         x1 = int(self.ROI_X1 * frame_width)
         y1 = int(self.ROI_Y1 * frame_height)
@@ -154,7 +154,7 @@ class CameraSettings(BaseSettings):
     
     def to_public_info(self) -> dict:
         """
-        Xuất cấu hình an toàn (không chứa mật khẩu) để gửi về frontend.
+        Xut cu hnh an ton (khng cha mt khu)  gi v frontend.
         """
         return {
             "name": self.CAMERA_NAME,
@@ -183,8 +183,8 @@ class CameraSettings(BaseSettings):
 # ==================
 def load_camera_config() -> CameraSettings:
     """
-    Tải cấu hình từ file .env.
-    Nếu không thấy file .env sẽ báo lỗi log.
+    Ti cu hnh t file .env.
+    Nu khng thy file .env s bo li log.
     """
     try:
         config = CameraSettings()
@@ -198,3 +198,4 @@ def load_camera_config() -> CameraSettings:
     except Exception as e:
         logger.error(f"Failed to load camera config: {e}")
         raise
+

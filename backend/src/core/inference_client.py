@@ -1,4 +1,4 @@
-"""
+﻿"""
 Roboflow Inference Client
 """
 import cv2
@@ -37,8 +37,8 @@ class InferenceClient:
     
     def detect_pose(self, frame_bgr, confidence=0.3) -> Dict[str, Any]:
         """
-        Gửi yêu cầu phát hiện dáng người (Pose Estimation) đến server suy luận.
-        Sử dụng model YOLOv8 Pose.
+        Gi yu cu pht hin dng ngi (Pose Estimation) n server suy lun.
+        S dng model YOLOv8 Pose.
         """
         try:
             _, buffer = cv2.imencode('.jpg', frame_bgr)
@@ -60,7 +60,7 @@ class InferenceClient:
     
     def health_check(self) -> bool:
         """
-        Kiểm tra kết nối đến server suy luận.
+        Kim tra kt ni n server suy lun.
         """
         try:
             resp = requests.get(f"{self.base_url}/", timeout=1)
@@ -69,3 +69,4 @@ class InferenceClient:
             return False
 
 inference_client = InferenceClient()
+

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Global ID Manager - Main orchestrator for person re-identification.
 Implements open-set tracklet-based ReID with multi-signal fusion.
 
@@ -351,3 +351,4 @@ if __name__ == "__main__":
     
     # Print stats
     manager.print_stats()
+

@@ -1,4 +1,4 @@
-"""
+﻿"""
 HAVEN Multi-Camera Sequential ReID Runner
 
 Processes cameras SEQUENTIALLY (cam1 -> cam2 -> cam3 -> cam4).
@@ -79,18 +79,23 @@ class SequentialReIDRunner:
         master_ids = self.config['master_cameras']['ids']
         reid_cfg = self.config['reid']
         
-        camera_graph = self.config.get('camera_graph', {})
+        camera_graph = self.config.get('camera_graph', {}).get('transitions', {})
         camera_graph = {int(k): v for k, v in camera_graph.items()}
+        
+        # Get config values with defaults
+        quality_cfg = reid_cfg.get('quality', {})
+        memory_cfg = reid_cfg.get('memory', {})
+        thresholds_cfg = reid_cfg.get('thresholds', {})
         
         self.global_id_manager = GlobalIDManager(
             master_camera_ids=master_ids,
-            accept_threshold=reid_cfg['thresholds']['accept'],
-            reject_threshold=reid_cfg['thresholds']['reject'],
+            accept_threshold=thresholds_cfg.get('accept', 0.75),
+            reject_threshold=thresholds_cfg.get('reject', 0.50),
             camera_graph=camera_graph,
-            max_prototypes=reid_cfg['memory']['max_prototypes'],
-            ema_alpha=reid_cfg['memory']['ema_alpha'],
-            min_bbox_size=reid_cfg['quality']['min_bbox_size'],
-            min_track_frames=reid_cfg['quality']['min_track_frames']
+            max_prototypes=memory_cfg.get('max_prototypes', 10),
+            ema_alpha=memory_cfg.get('ema_alpha', 0.3),
+            min_bbox_size=quality_cfg.get('min_bbox_size', 80),
+            min_track_frames=quality_cfg.get('min_tracklet_frames', quality_cfg.get('min_track_frames', 5))
         )
     
     def _init_models(self):
@@ -201,19 +206,25 @@ class SequentialReIDRunner:
             True to continue, False to quit
         """
         cam_id = cam_config['id']
-        cam_path = self.data_root / cam_config['path']
+        cam_name = cam_config.get('name', f'cam{cam_id}')
+        source_type = cam_config.get('source_type', 'video_folder')
+        source_path = cam_config.get('path', f'cam{cam_id}')
+        pattern = cam_config.get('pattern', '*.mp4')
         
         print(f"\n{'='*60}")
-        print(f"CAMERA {cam_id}: {cam_path}")
+        print(f"CAMERA {cam_id}: {source_path}")
         print(f"{'='*60}")
         
-        if not cam_path.exists():
-            print(f"  NOT FOUND - Skipping")
-            return True
-        
-        # Open video stream
+        # Open video stream with proper parameters
         try:
-            stream = VideoStream(str(cam_path))
+            stream = VideoStream(
+                camera_id=cam_id,
+                camera_name=cam_name,
+                source_type=source_type,
+                source_path=source_path,
+                data_root=str(self.data_root),
+                pattern=pattern
+            )
         except Exception as e:
             print(f"  ERROR: {e}")
             return True
@@ -298,9 +309,9 @@ class SequentialReIDRunner:
                         
                         # Log new IDs and matches
                         if reason == MatchReason.MASTER_NEW:
-                            print(f"  🆕 Frame {frame_idx}: Track {track_id} → G{global_id} (NEW)")
+                            print(f"   Frame {frame_idx}: Track {track_id}  G{global_id} (NEW)")
                         elif reason == MatchReason.MATCHED and num_frames == 1:
-                            print(f"  ✅ Frame {frame_idx}: Track {track_id} → G{global_id} (MATCH: {score:.2f})")
+                            print(f"   Frame {frame_idx}: Track {track_id}  G{global_id} (MATCH: {score:.2f})")
                         
                         # Draw
                         self._draw_detection(frame, bbox, global_id, track_id, reason, kpts)
@@ -353,13 +364,13 @@ class SequentialReIDRunner:
                     rec_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
                     rec_path = self.output_dir / f"rec_cam{cam_id}_{rec_ts}.mp4"
                     rec_writer = cv2.VideoWriter(str(rec_path), fourcc, fps, (self.display_w, self.display_h))
-                    print(f"  🔴 Recording started: {rec_path}")
+                    print(f"   Recording started: {rec_path}")
                 else:
                     recording = False
                     if rec_writer:
                         rec_writer.release()
                         rec_writer = None
-                    print(f"  ⏹️ Recording stopped")
+                    print(f"   Recording stopped")
         
         # Cleanup
         stream.release()
@@ -375,7 +386,7 @@ class SequentialReIDRunner:
     
     def run(self):
         """Run sequential processing."""
-        print("\n🚀 Starting sequential processing...")
+        print("\n Starting sequential processing...")
         print("Controls: SPACE=Pause, N=Next Camera, Q=Quit, G=Record MP4\n")
         
         for i, cam_config in enumerate(self.cameras):
@@ -396,7 +407,7 @@ class SequentialReIDRunner:
         
         # Summary
         self.global_id_manager.print_summary()
-        print("\n✅ Complete!")
+        print("\n Complete!")
 
 
 def main():
@@ -422,8 +433,9 @@ def main():
     try:
         runner.run()
     except KeyboardInterrupt:
-        print("\n⚠️ Stopped by user")
+        print("\n Stopped by user")
 
 
 if __name__ == "__main__":
     main()
+

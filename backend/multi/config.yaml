@@ -1,15 +1,15 @@
-# ============================================================
+﻿# ============================================================
 # HAVEN Multi-Camera Configuration
 # ============================================================
-# Unified config cho hệ thống multi-camera với:
+# Unified config cho h thng multi-camera vi:
 # - Pose detection + ADL classification
 # - Cross-camera ReID (Color Histogram)
 # - Master-Slave ID assignment
 # ============================================================
 
 # ============================================================
-# CAMERAS - MỖI VIDEO LÀ 1 CAMERA ENTRY
-# Thứ tự xử lý: phu1 -> phu2 -> unk1 -> phu3 -> unk2 -> phu4 -> phu5 -> unk3
+# CAMERAS - MI VIDEO L 1 CAMERA ENTRY
+# Th t x l: phu1 -> phu2 -> unk1 -> phu3 -> unk2 -> phu4 -> phu5 -> unk3
 # ============================================================
 cameras:
   # --- CAM1: phu1.mp4 ---
@@ -32,7 +32,7 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM2: unk1.mp4 (người lạ 1) ---
+  # --- CAM2: unk1.mp4 (ngi l 1) ---
   - id: "cam2_unk1"
     name: "Camera 2 - Unknown 1"
     enabled: true
@@ -52,7 +52,7 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM3: unk2.mp4 (người lạ 2) ---
+  # --- CAM3: unk2.mp4 (ngi l 2) ---
   - id: "cam3_unk2"
     name: "Camera 3 - Unknown 2"
     enabled: true
@@ -82,7 +82,7 @@ cameras:
     rtsp_username: ""
     rtsp_password: ""
     
-  # --- CAM4: unk3.mp4 (người lạ 3) ---
+  # --- CAM4: unk3.mp4 (ngi l 3) ---
   - id: "cam4_unk3"
     name: "Camera 4 - Unknown 3"
     enabled: true
@@ -108,7 +108,8 @@ yolo:
 reid:
   # Matching threshold (0.0 - 1.0)
   # Lower = match easier, Higher = stricter
-  threshold: 0.45
+  # 0.85 = VERY STRICT - Only near-identical persons match
+  threshold: 0.85
   
   # Update features every N frames
   update_interval: 5
@@ -142,3 +143,4 @@ output:
   database_path: "D:/HAVEN/backend/database/haven_reid.db"
   log_enabled: true
   log_level: "INFO"
+

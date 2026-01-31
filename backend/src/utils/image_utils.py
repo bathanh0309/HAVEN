@@ -1,4 +1,4 @@
-"""
+﻿"""
 Image processing utilities.
 """
 import cv2
@@ -189,3 +189,4 @@ if __name__ == "__main__":
     cropped = crop_bbox(test_img, bbox, padding=10)
     if cropped is not None:
         print(f"Cropped shape: {cropped.shape}")
+

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Similarity computation and multi-signal fusion.
 Implements the priority hierarchy: Face > Gait > Appearance
 """
@@ -93,7 +93,7 @@ def compute_identity_similarity(query_tracklet, candidate_identity, config) -> T
         # Check if appearance contradicts (clothing change indicator)
         if app_sim is not None and app_sim < 0.3:
             # Gait says SAME, appearance says DIFFERENT
-            # → Likely clothing change
+            #  Likely clothing change
             return gait_sim, 'medium', 'gait_override'
         return gait_sim, 'medium', 'gait'
     
@@ -143,7 +143,7 @@ def two_threshold_decision(similarity: float, confidence: str, signal_type: str,
     if similarity > T_high:
         return 'ACCEPT', best['global_id']
     
-    # Low similarity → definitely new
+    # Low similarity  definitely new
     if similarity < T_low:
         return 'CREATE_NEW', None
     
@@ -153,7 +153,7 @@ def two_threshold_decision(similarity: float, confidence: str, signal_type: str,
         margin = best['similarity'] - second_best['similarity']
         
         if margin < 0.15:
-            # Too close to second-best → ambiguous
+            # Too close to second-best  ambiguous
             return 'CREATE_NEW', None
     
     # Check quality
@@ -190,7 +190,7 @@ def apply_cooldown(tracklet, identity, cooldown_seconds=10) -> bool:
     time_since_last = tracklet.start_time - last_obs.end_time
     
     if time_since_last < cooldown_seconds:
-        # Recent observation → boost this identity's score
+        # Recent observation  boost this identity's score
         return True
     
     return False
@@ -212,4 +212,5 @@ if __name__ == "__main__":
     print(f"  Different vectors: {sim_different:.3f}")
     
     assert sim_similar > sim_different, "Similar should be higher!"
-    print("✅ Similarity test passed")
+    print(" Similarity test passed")
+

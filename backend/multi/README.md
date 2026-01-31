@@ -1,18 +1,18 @@
-# HAVEN Multi-Camera System
+﻿# HAVEN Multi-Camera System
 
-## 📁 Structure
+##  Structure
 
 ```
 backend/multi/
-├── config.yaml      # Main configuration
-├── run.py          # Main runner script
-├── reid.py         # Color Histogram ReID
-├── adl.py          # ADL classification
-├── visualize.py    # Visualization utilities
-└── README.md       # This file
+ config.yaml      # Main configuration
+ run.py          # Main runner script
+ reid.py         # Color Histogram ReID
+ adl.py          # ADL classification
+ visualize.py    # Visualization utilities
+ README.md       # This file
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ```bash
 # From project root
@@ -22,7 +22,7 @@ backend/multi/
 python backend\multi\run.py
 ```
 
-## ⚙️ Configuration
+##  Configuration
 
 Edit `config.yaml`:
 
@@ -43,7 +43,7 @@ adl:
   movement_threshold_ratio: 0.03  # Walking detection
 ```
 
-## 🎯 Features
+##  Features
 
 ### 1. Master-Slave ReID
 - **CAM1 (Master)**: Creates new Global IDs
@@ -57,15 +57,15 @@ adl:
 ### 3. ADL Classification
 - **STANDING**: Upright, no movement
 - **WALKING**: Upright, moving (threshold: 0.03 * frame_height)
-- **SITTING**: Bent knees (<130°)
-- **LAYING**: Torso angle >50° or aspect ratio >1.2
+- **SITTING**: Bent knees (<130)
+- **LAYING**: Torso angle >50 or aspect ratio >1.2
 
 ### 4. Event Detection
 - Fall detection (transition to LAYING)
 - Hand raise (left/right)
 - Sit down / Stand up
 
-## ⌨️ Controls
+##  Controls
 
 | Key | Action |
 |-----|--------|
@@ -73,14 +73,14 @@ adl:
 | N | Skip to next camera |
 | Q | Quit |
 
-## 📊 Output
+##  Output
 
 Console shows:
-- 🆕 New ID created (CAM1)
-- 🔗 ID matched (CAM2-4)
+-  New ID created (CAM1)
+-  ID matched (CAM2-4)
 - Summary at end
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### ID not matching?
 - Lower `reid.threshold` (e.g., 0.45)
@@ -89,3 +89,4 @@ Console shows:
 ### Walking detection wrong?
 - Lower `adl.movement_threshold_ratio` (e.g., 0.02)
 - Increase observation window
+

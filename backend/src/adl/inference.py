@@ -1,7 +1,7 @@
-"""
+﻿"""
 HAVEN ADL - Posture Inference
 =============================
-Logic suy luận tư thế (Posture) và trích xuất đặc trưng (Feature Extraction) từ Keypoints.
+Logic suy lun t th (Posture) v trch xut c trng (Feature Extraction) t Keypoints.
 """
 
 import math
@@ -11,10 +11,10 @@ from .data import FrameData, Keypoint
 
 class PostureClassifier:
     """
-    Phân loại tư thế: STANDING, SITTING, LAYING
-    Dựa trên:
-    1. Torso Angle (Góc thân người)
-    2. BBox Aspect Ratio (Tỷ lệ khung hình)
+    Phn loi t th: STANDING, SITTING, LAYING
+    Da trn:
+    1. Torso Angle (Gc thn ngi)
+    2. BBox Aspect Ratio (T l khung hnh)
     3. Relative Keypoint Positions
     """
     
@@ -32,7 +32,7 @@ class PostureClassifier:
 
     def process(self, frame_data: FrameData) -> FrameData:
         """
-        Xử lý chính: Tính features và xác định posture
+        X l chnh: Tnh features v xc nh posture
         """
         # 1. Feature Extraction
         frame_data.aspect_ratio = self._calc_aspect_ratio(frame_data.bbox)
@@ -57,9 +57,9 @@ class PostureClassifier:
 
     def _calc_torso_angle(self, keypoints: List[List[float]]) -> float:
         """
-        Tính góc nghiêng của thân người so với phương thẳng đứng (Vertical).
-        0 độ = đứng thẳng. 90 độ = nằm ngang.
-        Dùng trung điểm 2 vai và trung điểm 2 hông.
+        Tnh gc nghing ca thn ngi so vi phng thng ng (Vertical).
+        0  = ng thng. 90  = nm ngang.
+        Dng trung im 2 vai v trung im 2 hng.
         """
         if not keypoints or len(keypoints) < 13: return 0.0
         
@@ -74,7 +74,7 @@ class PostureClassifier:
         l_hip = get_pt(self.LEFT_HIP)
         r_hip = get_pt(self.RIGHT_HIP)
         
-        # Cần ít nhất 1 vai và 1 hông đối diện hoặc cùng bên
+        # Cn t nht 1 vai v 1 hng i din hoc cng bn
         if l_sh is None and r_sh is None: return 0.0
         if l_hip is None and r_hip is None: return 0.0
         
@@ -143,17 +143,18 @@ class PostureClassifier:
         Angle: 0=Upright, 90=Horizontal
         AR: Width/Height
         """
-        # LAYING: Góc nghiêng lớn (>60) HOẶC khung hình rất dẹt (AR > 1.2)
+        # LAYING: Gc nghing ln (>60) HOC khung hnh rt dt (AR > 1.2)
         if angle > 65 or ar > 1.4:
             return "LAYING"
             
-        # SITTING: Góc nghiêng trung bình (20-60) hoặc AR hơi lớn
-        # Heuristic: Sitting thường AR ~ 0.6-0.9, Standing AR ~ 0.3-0.5
+        # SITTING: Gc nghing trung bnh (20-60) hoc AR hi ln
+        # Heuristic: Sitting thng AR ~ 0.6-0.9, Standing AR ~ 0.3-0.5
         if ar > 0.6:
             return "SITTING"
             
-        # STANDING: Góc nghiêng nhỏ (<30) VÀ AR nhỏ
+        # STANDING: Gc nghing nh (<30) V AR nh
         if angle < 45 and ar < 0.8:
             return "STANDING"
             
         return "UNKNOWN"
+

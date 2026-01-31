@@ -1,4 +1,4 @@
-
+﻿
 import logging
 import time
 import numpy as np
@@ -34,8 +34,8 @@ class AIEngine:
     
     def load_model(self):
         """
-        Tải model YOLO từ đường dẫn cấu hình.
-        Chỉ tải nếu model chưa được khởi tạo.
+        Ti model YOLO t ng dn cu hnh.
+        Ch ti nu model cha c khi to.
         """
         if self.model: return
         try:
@@ -48,8 +48,8 @@ class AIEngine:
 
     def _parse_results(self, results, roi_offset=(0,0)) -> List[Dict]:
         """
-        Chuyển đổi kết quả từ YOLO (Boxes, Keypoints) sang định dạng danh sách dictionary dễ dùng.
-        Đồng thời điều chỉnh tọa độ (offset) nếu đang dùng chế độ ROI.
+        Chuyn i kt qu t YOLO (Boxes, Keypoints) sang nh dng danh sch dictionary d dng.
+        ng thi iu chnh ta  (offset) nu ang dng ch  ROI.
         """
         detections = []
         if not results: return detections
@@ -125,11 +125,11 @@ class AIEngine:
 
     def process_frame(self, frame: np.ndarray) -> Tuple[np.ndarray, List[Dict]]:
         """
-        Thực hiện quy trình suy luận AI:
-        1. Cắt vùng ROI (nếu bật).
-        2. Chạy model YOLO (nếu đến lượt frame cần chạy).
-        3. Vẽ box/skeleton lên frame.
-        4. Trả về frame đã vẽ và danh sách phát hiện.
+        Thc hin quy trnh suy lun AI:
+        1. Ct vng ROI (nu bt).
+        2. Chy model YOLO (nu n lt frame cn chy).
+        3. V box/skeleton ln frame.
+        4. Tr v frame  v v danh sch pht hin.
         """
         if self.model is None:
             self.load_model()
@@ -244,9 +244,10 @@ class AIEngine:
 # Singleton
 _ai_instance = None
 def get_ai_engine(config: CameraSettings = None) -> AIEngine:
-    """Trả về instance duy nhất của AIEngine (Singleton Pattern)."""
+    """Tr v instance duy nht ca AIEngine (Singleton Pattern)."""
     global _ai_instance
     global _ai_instance
     if _ai_instance is None and config:
         _ai_instance = AIEngine(config)
     return _ai_instance
+

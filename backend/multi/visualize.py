@@ -1,4 +1,4 @@
-"""
+﻿"""
 Visualization utilities - pose skeleton & UI
 """
 import cv2
@@ -211,3 +211,4 @@ def draw_ui_panel(frame, cam_id, frame_idx, total_frames, is_master, global_ids)
     cv2.putText(frame, "SPACE=Pause | N=Next | Q=Quit",
                (w - 300, h - 35),
                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (120, 120, 120), 1)
+

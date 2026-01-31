@@ -1,4 +1,4 @@
-"""
+﻿"""
 Database CRUD operations for HAVEN ReID system.
 """
 import pickle
@@ -221,3 +221,4 @@ if __name__ == "__main__":
     print(f"Database stats: {stats}")
     
     db.close()
+

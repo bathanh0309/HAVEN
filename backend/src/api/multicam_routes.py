@@ -1,10 +1,10 @@
-"""
+﻿"""
 WebSocket and REST API routes for multi-camera streaming.
 
 Updated endpoints:
-- /ws/stream          → Legacy (defaults to cam1)
-- /ws/stream/{camera_id} → New multi-camera endpoint
-- GET /api/cameras    → List all camera statuses
+- /ws/stream           Legacy (defaults to cam1)
+- /ws/stream/{camera_id}  New multi-camera endpoint
+- GET /api/cameras     List all camera statuses
 """
 
 import asyncio
@@ -188,3 +188,4 @@ async def health_check():
         "cameras_registered": len(statuses),
         "cameras_connected": connected_cameras,
     })
+
