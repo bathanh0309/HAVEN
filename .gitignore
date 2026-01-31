@@ -206,3 +206,8 @@ private_key.pem
 # 3. Rotate all exposed credentials immediately
 # 4. See SECURITY.md for incident response
 # ==================
+# ==================
+# Excluded Folders
+# ==================
+.agent/
+deployment/
