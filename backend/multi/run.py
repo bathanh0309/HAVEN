@@ -51,10 +51,14 @@ class SequentialRunner:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.csv_path = self.output_dir / f"log_{timestamp}.csv"
-        self.csv_file = open(self.csv_path, 'w', newline='')
+        self.csv_path = self.output_dir / "log.csv"
+        
+        mode = 'a' if self.csv_path.exists() else 'w'
+        self.csv_file = open(self.csv_path, mode, newline='')
         self.csv_writer = csv.writer(self.csv_file)
-        self.csv_writer.writerow(['timestamp', 'camera', 'frame', 'track_id', 'global_id', 'posture', 'bbox', 'keypoints', 'objects'])
+        
+        if mode == 'w':
+            self.csv_writer.writerow(['timestamp', 'camera', 'frame', 'track_id', 'global_id', 'posture', 'bbox', 'keypoints', 'objects'])
         print(f"CSV Log: {self.csv_path}")
         
         # 2. Database Logging (SQLite)
@@ -363,7 +367,7 @@ class SequentialRunner:
                     if not self.recording:
                         self.recording = True
                         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                        out_path = self.output_dir / f"rec_{ts}.mp4"
+                        out_path = BACKEND_DIR.parent / "output.mp4"
                         self.video_writer = cv2.VideoWriter(
                             str(out_path), 
                             cv2.VideoWriter_fourcc(*'mp4v'), 
@@ -391,7 +395,7 @@ class SequentialRunner:
                     if not self.recording:
                         self.recording = True
                         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                        out_path = self.output_dir / f"rec_{ts}.mp4"
+                        out_path = BACKEND_DIR.parent / "output.mp4"
                         self.video_writer = cv2.VideoWriter(
                             str(out_path), 
                             cv2.VideoWriter_fourcc(*'mp4v'), 
