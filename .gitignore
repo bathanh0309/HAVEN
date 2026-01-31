@@ -211,3 +211,4 @@ private_key.pem
 # ==================
 .agent/
 deployment/
+.github/
