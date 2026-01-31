@@ -113,10 +113,9 @@ class SequentialRunner:
         self.cameras = [c for c in self.config['cameras'] if c['enabled']]
         print(f"Cameras: {len(self.cameras)}")
         
-        # GIF Recording
+        # Video Recording
         self.recording = False
-        self.gif_frames = []
-        self.gif_counter = 0
+        self.video_writer = None
         
         print("="*60)
     
@@ -340,12 +339,12 @@ class SequentialRunner:
                 # UI
                 draw_ui_panel(display, cam_id, frame_idx, total_frames, is_master, global_ids_seen)
                 
-                # GIF REC indicator & Capture
+                # Video REC indicator & Capture
                 if self.recording:
                     cv2.circle(display, (self.display_w - 30, 30), 10, (0, 0, 255), -1)
                     cv2.putText(display, "REC", (self.display_w - 70, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                    if len(self.gif_frames) < 500: # Limit to avoid OOM
-                        self.gif_frames.append(cv2.cvtColor(display, cv2.COLOR_BGR2RGB))
+                    if self.video_writer:
+                        self.video_writer.write(display)
                 
                 # Show
                 cv2.imshow("HAVEN Sequential", display)
@@ -363,31 +362,21 @@ class SequentialRunner:
                 elif key == ord('g'):
                     if not self.recording:
                         self.recording = True
-                        self.gif_frames = []
-                        print("\n[REC] Started GIF recording...")
+                        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        out_path = self.output_dir / f"rec_{ts}.mp4"
+                        self.video_writer = cv2.VideoWriter(
+                            str(out_path), 
+                            cv2.VideoWriter_fourcc(*'mp4v'), 
+                            fps, 
+                            (self.display_w, self.display_h)
+                        )
+                        print(f"\n[REC] Started MP4 recording: {out_path}")
                     else:
                         self.recording = False
-                        print(f"\n[REC] Stop. Saving ({len(self.gif_frames)} frames)...")
-                        if self.gif_frames:
-                            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            if imageio:
-                                out_path = self.output_dir / f"rec_{ts}.gif"
-                                try:
-                                    imageio.mimsave(out_path, self.gif_frames, fps=10)
-                                    print(f"[REC] Saved GIF: {out_path}")
-                                except Exception as e:
-                                    print(f"[REC] Error saving GIF: {e}")
-                            else:
-                                # Fallback to PIL (Pillow)
-                                try:
-                                    from PIL import Image
-                                    out_path = self.output_dir / f"rec_{ts}.gif"
-                                    pil_frames = [Image.fromarray(fr) for fr in self.gif_frames]
-                                    pil_frames[0].save(out_path, save_all=True, append_images=pil_frames[1:], optimize=True, duration=100, loop=0)
-                                    print(f"[REC] Saved GIF (via PIL): {out_path}")
-                                except Exception as e:
-                                    print(f"[REC] Error saving GIF: {e}")
-                        self.gif_frames = []
+                        if self.video_writer:
+                            self.video_writer.release()
+                            self.video_writer = None
+                        print("\n[REC] Stop. MP4 saved.")
             else:
                 # Paused handling
                 key = cv2.waitKey(50) & 0xFF
@@ -401,31 +390,21 @@ class SequentialRunner:
                 elif key == ord('g'):
                     if not self.recording:
                         self.recording = True
-                        self.gif_frames = []
-                        print("\n[REC] Started GIF recording...")
+                        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        out_path = self.output_dir / f"rec_{ts}.mp4"
+                        self.video_writer = cv2.VideoWriter(
+                            str(out_path), 
+                            cv2.VideoWriter_fourcc(*'mp4v'), 
+                            fps, 
+                            (self.display_w, self.display_h)
+                        )
+                        print(f"\n[REC] Started MP4 recording: {out_path}")
                     else:
                         self.recording = False
-                        print(f"\n[REC] Stop. Saving ({len(self.gif_frames)} frames)...")
-                        if self.gif_frames:
-                            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            if imageio:
-                                out_path = self.output_dir / f"rec_{ts}.gif"
-                                try:
-                                    imageio.mimsave(out_path, self.gif_frames, fps=10)
-                                    print(f"[REC] Saved GIF: {out_path}")
-                                except Exception as e:
-                                    print(f"[REC] Error saving GIF: {e}")
-                            else:
-                                # Fallback to PIL (Pillow)
-                                try:
-                                    from PIL import Image
-                                    out_path = self.output_dir / f"rec_{ts}.gif"
-                                    pil_frames = [Image.fromarray(fr) for fr in self.gif_frames]
-                                    pil_frames[0].save(out_path, save_all=True, append_images=pil_frames[1:], optimize=True, duration=100, loop=0)
-                                    print(f"[REC] Saved GIF (via PIL): {out_path}")
-                                except Exception as e:
-                                    print(f"[REC] Error saving GIF: {e}")
-                        self.gif_frames = []
+                        if self.video_writer:
+                            self.video_writer.release()
+                            self.video_writer = None
+                        print("\n[REC] Stop. MP4 saved.")
         
         cap.release()
         print(f"   Finished. Global IDs: {global_ids_seen}")
@@ -441,7 +420,7 @@ class SequentialRunner:
     def run(self):
         """Run sequential processing."""
         print("\nStarting...")
-        print("Controls: SPACE=Pause, N=Next, Q=Quit, G=Record GIF\n")
+        print("Controls: SPACE=Pause, N=Next, Q=Quit, G=Record MP4\n")
         
         cv2.namedWindow("HAVEN Sequential", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("HAVEN Sequential", self.display_w, self.display_h)

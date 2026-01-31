@@ -11,10 +11,7 @@ echo.
 :: Di chuyển ra thư mục gốc project
 cd /d "%~dp0.."
 
-echo [0/4] Cấu hình Git LFS...
-git lfs install
-git lfs track "*.gif"
-git add .gitattributes
+
 
 echo [1/4] Đang thêm các thay đổi vào staging area...
 git add .
